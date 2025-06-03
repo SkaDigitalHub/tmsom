@@ -1,9 +1,9 @@
-const CACHE_NAME = 'WACI-Admin-App-v1';  // ← Versioned for updates
+const CACHE_NAME = 'TMSOM-App-v1';  // ← Versioned for updates
 const urlsToCache = [
   './',                // Relative to the service worker's path
   './index.html',
-  './img/logo.png',
-  './reg/styles.css'
+  './logo/main.png',
+  './css/main.css'
   '/reg/script.js'
   './styles.css'
   '/script.js'

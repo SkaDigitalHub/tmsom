@@ -1,18 +1,18 @@
 {
-  "name": "WACI Administrative App",
-  "short_name": "Admin_WACI",
-  "start_url": "/waci/index.html",
+  "name": "TMSOM App",
+  "short_name": "TMSOM",
+  "start_url": "/tmsom/index.html",
   "display": "standalone",
   "background_color": "green",
   "theme_color": "#8A1878",
   "icons": [
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "512x512",
       "type": "image/png"
     }

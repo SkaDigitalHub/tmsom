@@ -118,8 +118,8 @@
         }
 
         body.dark-mode {
-            background-color: #121212;
-            color: #333;
+            background: #121212;
+            color: #f4f4f9;
         }
 
         @media (max-width: 768px) {

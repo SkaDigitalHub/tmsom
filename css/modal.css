@@ -4,7 +4,11 @@
             padding: 0;
             background-color: rgba(0, 0, 0, 0.7);
         }
-        
+
+       body.dark-mode {
+            background-color: #121212; 
+            color: #ffffff;
+       }        
         /* Modal styles */
         .modal {
             display: block;
@@ -28,7 +32,10 @@
             overflow: hidden;
             box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
         }
-        
+
+       body.dark-mode .modal-container {
+            background: #f1f2f1f2;
+
         .close-btn {
             position: absolute;
             top: 15px;
@@ -139,7 +146,36 @@
             height: 50px;
             animation: spin 1s linear infinite;
         }
-        
+
+        /* Dark Mode Toggle Button - Protected from other button styles */
+        .mode-toggle {
+            position: fixed;
+            top: 1.0rem;
+            right: 1.25rem;
+            width: 1.80rem;
+            height: 1.80rem;
+            z-index: 100;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0.13rem 0.31rem rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .mode-toggle.light {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
         @keyframes spin {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }

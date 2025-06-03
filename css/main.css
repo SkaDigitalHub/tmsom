@@ -15,6 +15,10 @@
             padding: 20px;
             text-align: center;
         }
+
+      body.dark-mode {
+            background-color: #121212;
+       }
         
         .logo-container {
             display: flex;
@@ -43,7 +47,7 @@
             margin-bottom: 10px;
         }
 
-        dark-mode.school-name {
+        body.dark-mode .school-name {
             color: #f1f1f1;
        }
         
@@ -54,8 +58,8 @@
             max-width: 500px;
         }
 
-       dark-mode.description {
-            color: #B3B3B3;
+       body.dark-mode .description {
+            color: #b3b3b3;
        }  
         
         .buttons {
@@ -123,11 +127,6 @@
 
         .mode-toggle:hover {
             transform: scale(1.1);
-        }
-
-        body.dark-mode {
-            background-color: #121212;
-            color: #f4f4f9;
         }
 
         @media (max-width: 768px) {

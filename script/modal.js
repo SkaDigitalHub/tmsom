@@ -1,3 +1,28 @@
+        // Dark Mode Toggle
+        function toggleMode() {
+            const body = document.body;
+            const toggleButton = document.querySelector('.mode-toggle');
+
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                toggleButton.textContent = '☀️';
+                toggleButton.classList.add('light');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                toggleButton.textContent = '🌙';
+                toggleButton.classList.remove('light');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.mode-toggle').textContent = '☀️';
+            document.querySelector('.mode-toggle').classList.add('light');
+        }
+
+
         // DOM Elements
         const modal = document.getElementById('admissionModal');
         const closeBtn = document.getElementById('closeModal');

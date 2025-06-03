@@ -87,7 +87,41 @@
             opacity: 0.9;
             transform: translateY(-2px);
         }
-        
+
+/* Dark Mode Toggle Button - Protected from other button styles */
+        .mode-toggle {
+            position: fixed;
+            top: 1.0rem;
+            right: 1.25rem;
+            width: 1.88rem;
+            height: 1.88rem;
+            z-index: 100;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0.13rem 0.31rem rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .mode-toggle.light {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #333;
+        }
+
         @media (max-width: 768px) {
             .school-name {
                 font-size: 2rem;

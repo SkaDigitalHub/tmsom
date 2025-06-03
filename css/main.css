@@ -27,8 +27,8 @@
             text-align: center;
         }
 
-      body.dark-mode {
-            background: #121212;
+      body.dark-mode body {
+            background-color: #121212;
        }
         
         .logo-container {
@@ -52,7 +52,7 @@
         }
 
        body.dark-mode .logo {
-            background: #121212;
+            background-color: #121212;
        }
         
         .school-name {

@@ -43,8 +43,8 @@
             margin-bottom: 10px;
         }
 
-        dark-mode.school-name, dark-mode.description {
-            color: white;
+        dark-mode.school-name {
+            color: #f1f1f1;
        }
         
         .description {
@@ -53,6 +53,10 @@
             margin-bottom: 30px;
             max-width: 500px;
         }
+
+       dark-mode.description {
+            color: #B3B3B3;
+       }  
         
         .buttons {
             display: flex;

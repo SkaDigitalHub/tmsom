@@ -1,4 +1,15 @@
-        * {
+       :root {
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(30, 30, 30, 0.8);
+            --border: 1px solid rgba(255, 255, 255, 0.2);
+            --border-dark: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --primary: #667eea;
+            --secondary: #764ba2;
+       }
+
+       * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;

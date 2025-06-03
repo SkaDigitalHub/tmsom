@@ -3,18 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modal with Auto-Open URL</title>
+    <title>TMSOM PaymentPortal</title>
     <link rel="stylesheet" href="css/register.css">
     </style>
 </head>
 <body>
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+        <!-- Modal Structure -->
+    <div id="admissionModal" class="modal">
+        <div class="modal-container">
             <button class="close-btn" id="closeModal">&times;</button>
-            <iframe src="https://selar.com/14d344" allowfullscreen></iframe>
+            
+            <div class="iframe-container">
+                <div class="loader" id="loader"></div>
+                <iframe id="admissionFrame" src="https://selar.com/14d344" allowfullscreen></iframe>
+                
+                <div class="fallback-message" id="fallbackMessage">
+                    <h2>Admission Portal</h2>
+                    <p>Please select an option below:</p>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn register-btn" id="registerBtn">Register As New Student</button>
+                        <button class="action-btn pay-btn" id="payBtn">Pay Fees As Existing Student</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <script src="script/register.js"></script>
 </body>

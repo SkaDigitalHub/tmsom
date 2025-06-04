@@ -262,6 +262,15 @@
             box-shadow: 0 0.13rem 0.31rem rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s, transform 0.3s;
          }
+        /* Default (light mode) */
+        .fa-house {
+             color: #474bd6; /* Blue icon for light mode */
+        }
+
+       /* Dark mode */
+        .dark-mode .fa-house {
+             color: #fff; /* White icon for dark mode */
+      }
 
         .mode-toggle.light {
             background-color: #f4f4f9;

@@ -51,11 +51,11 @@
         closeBtn.addEventListener('click', closeModal);
         
         registerBtn.addEventListener('click', function() {
-            window.open(registerUrl, '_blank');
+            window.open(registerUrl, '_self');
         });
         
         payBtn.addEventListener('click', function() {
-            window.open(paymentUrl, '_blank');
+            window.open(paymentUrl, '_self');
         });
         
         window.addEventListener('click', function(event) {

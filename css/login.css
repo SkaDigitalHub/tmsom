@@ -248,12 +248,12 @@
             position: fixed;
             top: 1.0rem;
             left: 1.25rem;
-            width: 1.88rem;
-            height: 1.88rem;
+            width: 0;
+            height: 0;
             z-index: 100;
             border-radius: 50%;
             background-color: bisque;
-            color: brown;
+            color: white;
             border: none;
             cursor: pointer;
             display: flex;

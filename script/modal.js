@@ -51,7 +51,7 @@
         closeBtn.addEventListener('click', closeModal);
         
         registerBtn.addEventListener('click', function() {
-            window.open(registerUrl, '_self');
+            window.location.href = registerUrl;
         });
         
         payBtn.addEventListener('click', function() {

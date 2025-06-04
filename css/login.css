@@ -264,12 +264,12 @@
          }
         /* Default (light mode) */
         .fa-house {
-             color: #474bd6; /* Blue icon for light mode */
+             color: #667eea; /* Blue icon for light mode */
         }
 
        /* Dark mode */
         .dark-mode .fa-house {
-             color: #fff; /* White icon for dark mode */
+             color: #121212; /* black icon for dark mode */
       }
 
         .mode-toggle.light {

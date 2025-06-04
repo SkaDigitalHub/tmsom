@@ -244,6 +244,25 @@
             transition: background-color 0.3s, transform 0.3s;
         }
 
+         .btn {
+            position: fixed;
+            top: 1.0rem;
+            left: 1.25rem;
+            width: 1.88rem;
+            height: 1.88rem;
+            z-index: 100;
+            border-radius: 50%;
+            background-color: bisque;
+            color: brown;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0.13rem 0.31rem rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+         }
+
         .mode-toggle.light {
             background-color: #f4f4f9;
             color: #333;

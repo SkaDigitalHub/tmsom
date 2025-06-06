@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMSOM Chat Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="agent.css">
+<body>
+    <div class="btn"><a href="index.html"><i class="fa-solid fa-house"></i></a></div>
+        <!-- Dark Mode Toggle Button -->
+  <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+    
+    <div class="front-page" id="front-page">
+        <img src="https://img.freepik.com/free-photo/portrait-mature-teacher-looking-camera_23-2149111111.jpg" alt="TMSOM AI Assistant" class="ai-agent-image">
+        <h1 class="front-page-title">TMSOM AI Assistant</h1>
+        <p class="front-page-subtitle">Your virtual guide to The Mandate School Of Ministry program</p>
+        
+        <div class="front-page-buttons">
+            <button class="front-page-btn about-btn" id="about-btn">ABOUT</button>
+            <button class="front-page-btn chat-btn" id="chat-btn">CHAT</button>
+        </div>
+    </div>
+
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header">
+            <button class="back-to-front" id="back-to-front-btn">
+                ← Back
+            </button>
+            <button class="history-btn" id="history-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M18 17V9"></path>
+                    <path d="M13 17V5"></path>
+                    <path d="M8 17v-3"></path>
+                </svg>
+            </button>
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiwyQTEwLDEwIDAgMCwwIDIsMTJBMTAsMTAgMCAwLDAgMTIsMjJBMTAsMTAgMCAwLDAgMjIsMTJBMTAsMTAgMCAwLDAgMTIsMk0xMiw0QTgsOCAwIDAsMSAyMCwxMkE4LDggMCAwLDEgMTIsMjBBOCw4IDAgMCwxIDQsMTJBOCw4IDAgMCwxIDEyLDRNNiwxM0gxOFYxMUg2VjEzWiIgLz48L3N2Zz4=" alt="Chat">
+            TMSOM Assistant
+        </div>
+        
+        <div class="history-panel" id="history-panel">
+            <div class="history-header">
+                <div class="history-header-content">
+                    <div class="history-title">Chat History</div>
+                    <button class="clear-history" id="clear-history">
+                        ❌ Clear All
+                    </button>
+                </div>
+                <button class="close-history" id="close-history">×</button>
+            </div>
+            <div id="history-list"></div>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message">Welcome to TMSOM! How can I help you today? 😊</div>
+            <div class="bot-message">Hi there! I'm your <b>TMSOM</b> assistant. Ask me about our <span class="highlight">6-month</span> ministry program, requirements, fees, or any other details. <a href="https://selar.com/tmsomadmforms" class="url-button">Register Now</a></div>
+        </div>
+        <div class="quick-questions" id="quick-questions">
+            <button class="quick-question">What is TMSOM?</button>
+            <button class="quick-question">How much is the tuition?</button>
+            <button class="quick-question">When does it start?</button>
+            <button class="quick-question" id="register-button">Register/Pay Now</button>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your question here..." autocomplete="off">
+            <button id="send-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="chat-container" id="about-container" style="display: none;">
+        <div class="chat-header">
+            <button class="back-to-front" id="back-btn">
+                ← Back
+            </button>
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiwyQTEwLDEwIDAgMCwwIDIsMTJBMTAsMTAgMCAwLDAgMTIsMjJBMTAsMTAgMCAwLDAgMjIsMTJBMTAsMTAgMCAwLDAgMTIsMk0xMiw0QTgsOCAwIDAsMSAyMCwxMkE4LDggMCAwLDEgMTIsMjBBOCw4IDAgMCwxIDQsMTJBOCw4IDAgMCwxIDEyLDRNNiwxM0gxOFYxMUg2VjEzWiIgLz48L3N2Zz4=" alt="Chat">
+            About TMSOM
+        </div>
+        
+        <div class="chat-messages">
+            <div class="about-content">
+                <h2>The Mandate School Of Ministry (<b>TMSOM</b>)</h2>
+                <p><b>TMSOM</b> is a <span class="highlight">6-month</span> intensive class designed to nurture and raise men and women for the work of the ministry spearheaded by the <b>Lady Rev. Juanita N.B Arthur</b> (The Praying Oracle).</p>
+                <br>
+                <h3>Program Details</h3>
+                <ul>
+                    <li><strong>Duration:</strong> <span class="highlight">6 months</span> (May to October 2025)</li>
+                    <li><strong>Lectures:</strong> <span class="highlight">3 hours</span> per session (attendance compulsory)</li>
+                    <li><strong>Venue:</strong> Official mobile/Web App (link provided after registration)</li>
+                </ul>
+                <br>
+                <h3>Tuition Information</h3>
+                <ul>
+                    <li><strong>Fee:</strong> <span class="highlight">GH¢300</span> ≈ <span class="highlight">$19.56</span> (subject to currency fluctuations)</li>
+                    <li><strong>Installment Plan:</strong> Available from <span class="highlight">GH¢50.00</span> and above</li>
+                    <li><strong>Covers:</strong> Handout PDF, Exams, and other learning materials</li>
+                </ul>
+                <br>
+                <h3>Requirements</h3>
+                <ul>
+                    <li>Committed individuals desiring deeper ministry journey</li>
+                    <li>Video must be ON during lectures for full participation</li>
+                    <li>Three consecutive absences lead to suspension (unless with valid notice)</li>
+                </ul>
+                <br>
+                <h3>Graduation</h3>
+                <ul>
+                    <li>Certificate awarded after six months</li>
+                    <li>Optional Ordination requires additional one month training</li>
+                    <li>Specific requirements must be met for ordination</li>
+                </ul>
+                
+                <p style="text-align: center; margin-top: 20px;">
+                    <a href="https://selar.com/tmsomadmforms" class="url-button">Register Now</a>
+                </p>
+            </div>
+        </div>
+    </div>
+   <script src="agent.js"></script>
+</body>
+</html>
+ 

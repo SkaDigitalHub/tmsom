@@ -29,7 +29,7 @@
                     answer: "The Mandate School Of Ministry — <b>TMSOM</b> is a <span class='highlight'>6-month</span> intensive class designed to nurture and raise men and women for the work of the ministry spearheaded by the <b>Lady Rev. Juanita N.B Arthur</b> (The Praying Oracle)."
                 },
                 {
-                    questionTerms: ["who is the founder", "principal", "head of the school", "leader", "visioneer" "Rev. Juanita"],
+                    questionTerms: ["who is the founder", "principal", "head of the school", "leader", "visioneer", "Rev. Juanita"],
                     answer: "<b>TMSOM</b> is spearheaded by the <span class='highlight'>Lady Rev. Juanita N.B Arthur</span> (The Praying Oracle). She is the leader and founder of <b>Christian Prayer Room Network (CPRN)</b>, a thriving Christian network among the youth. She is known for <span class='highlight'>Prayer and TONGUES OF FIRE</span>. Her vision is to nurture and raise men and women for the work of the ministry"
                 },
                 {

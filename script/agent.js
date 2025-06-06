@@ -1,4 +1,4 @@
-           document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const frontPage = document.getElementById('front-page');
             const chatContainer = document.getElementById('chat-container');
             const aboutContainer = document.getElementById('about-container');
@@ -29,8 +29,8 @@
                     answer: "The Mandate School Of Ministry — <b>TMSOM</b> is a <span class='highlight'>6-month</span> intensive class designed to nurture and raise men and women for the work of the ministry spearheaded by the <b>Lady Rev. Juanita N.B Arthur</b> (The Praying Oracle)."
                 },
                 {
-                    questionTerms: ["who is the founder", "principal", "head of the school", "leader", "visioneer"],
-                    answer: "<b>TMSOM</b> spearheaded by the <span class='highlight'>Lady Rev. Juanita N.B Arthur</span> (The Praying Oracle). She is the leader and founder of <b>Christian Prayer Room Network (CPRN)</b>, a thriving Christian network among the youth. She is known for <span class='highlight'>Prayer and TONGUES OF FIRE</span>. Her vision is to nurture and raise men and women for the work of the ministry"
+                    questionTerms: ["who is the founder", "principal", "head of the school", "leader", "visioneer" "Rev. Juanita"],
+                    answer: "<b>TMSOM</b> is spearheaded by the <span class='highlight'>Lady Rev. Juanita N.B Arthur</span> (The Praying Oracle). She is the leader and founder of <b>Christian Prayer Room Network (CPRN)</b>, a thriving Christian network among the youth. She is known for <span class='highlight'>Prayer and TONGUES OF FIRE</span>. Her vision is to nurture and raise men and women for the work of the ministry"
                 },
                 {
                     questionTerms: ["tuition fee", "how much", "cost", "payment", "price", "fee"],
@@ -99,10 +99,10 @@
             // Convert URLs in text to clickable buttons
             function convertUrlsToButtons(text) {
                 // First remove any existing button tags to prevent duplication
-                text = text.replace(/<a[^>]*>([^<]*)</a>/g, '$1');
+                text = text.replace(/<a[^>]*>([^<]*)<\/a>/g, '$1');
                 
                 // Then convert URLs to buttons
-                const urlRegex = /(https?://[^s]+)/g;
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
                 return text.replace(urlRegex, function(url) {
                     const buttonText = url.includes('selar.com') ? 'Pay Now' : 'Visit';
                     return '<a href="' + url + '" target="_blank" class="url-button">' + buttonText + '</a>';
@@ -116,7 +116,7 @@
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
                 
                 // Create a sanitized version of the text for history (without HTML)
-                const sanitizedText = text.replace(/<a[^>]*>([^<]*)</a>/g, '$1');
+                const sanitizedText = text.replace(/<a[^>]*>([^<]*)<\/a>/g, '$1');
                 
                 if (isUser) {
                     messageDiv.textContent = text;
@@ -253,8 +253,8 @@
 
             // Calculate similarity between two strings
             function getSimilarity(a, b) {
-                const aWords = a.toLowerCase().split(/s+/);
-                const bWords = b.toLowerCase().split(/s+/);
+                const aWords = a.toLowerCase().split(/\s+/);
+                const bWords = b.toLowerCase().split(/\s+/);
                 let matches = 0;
                 
                 for (const aWord of aWords) {
@@ -391,7 +391,7 @@
                 toggleButton.classList.remove('light');
                 localStorage.setItem('darkMode', 'disabled');
             }
-        }
+        };
 
         // Check for saved dark mode preference
         if (localStorage.getItem('darkMode') === 'enabled') {
@@ -399,4 +399,5 @@
             document.querySelector('.mode-toggle').textContent = '☀️';
             document.querySelector('.mode-toggle').classList.add('light');
         }
-  
+ 
+ 

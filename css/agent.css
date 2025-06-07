@@ -616,8 +616,8 @@
 
  @media (max-width: 767px) { 
          .chat-input button {
-             width: 20px;
-             height: 20px;
+             width: 24px;
+             height: 24px;
          }
          .chat-input input {
             padding: 12px 10px;

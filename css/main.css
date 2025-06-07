@@ -66,7 +66,7 @@
         .school-name {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #f1f1f1;
+            color: var(--primary);
             margin-bottom: 10px;
         }
 
@@ -76,7 +76,7 @@
         
         .description {
             font-size: 1.2rem;
-            color: #b3b3b3;
+            color: var(--accent);
             margin-bottom: 30px;
             max-width: 500px;
         }
@@ -111,6 +111,7 @@
         .btn-register {
             background-color: var(--accent);
             color: white;
+            border-color: var(--border);  
         }
         
         .btn-learn {

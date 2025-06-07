@@ -322,7 +322,7 @@
             backdrop-filter: blur(10px); 
             -webkit-backdrop-filter: blur(10px); 
             border-radius: 20px;            
-            border: var(--primary); 
+            border: 2px solid var(--primary); 
             box-shadow: var(--shadow); 
             padding: 40px; 
             animation: fadeIn 0.8s ease-out, float 6s ease-in-out infinite alternate; 
@@ -384,7 +384,7 @@
             margin-bottom: 8px; 
             font-weight: 500; 
             font-size: 0.95rem; 
-            color: var(--primary); 
+            color: var(--); 
         } 
 
         body.dark-mode label {
@@ -394,8 +394,8 @@
         input, select, textarea { 
             width: 100%; 
             padding: 15px 20px; 
-            background: var(--back); 
-            border: var(--primary); 
+            background: var(--main); 
+            border: 2px solid var(--primary); 
             border-radius: 12px; 
             font-size: 1rem; 
             color: white; 
@@ -415,7 +415,8 @@
         }
         
            input:focus, select:focus { 
-            background: var(--back); 
+            background: var(--main); 
+            border: 2px solid var(--primary); 
             border-color: var(--primary); 
             box-shadow: 0 4px 15px rgba(106, 90, 205, 0.4); 
         } 
@@ -428,7 +429,8 @@
         }
 
         input::placeholder { 
-            color: var(--secondary); 
+            color: var(--accent); 
+            border: 2px solid var(--primary); 
         } 
         select option { 
             background: var(--back); 
@@ -437,7 +439,7 @@
         button:not(.menu-btn):not(.mode-toggle) { 
             width: 100%; 
             padding: 16px; 
-            background: linear-gradient(to right, var(--tertiary), var(--neutral)); 
+            background: linear-gradient(to right, var(--primary), var(--secondary)); 
             border: none; 
             border-radius: 12px; 
             color: white; 
@@ -481,9 +483,9 @@
         .success-message {
             display: none;
             text-align: center;
-            color: white;
+            color: var(--primary);
             padding: 20px;
-            background: var(--secondary);
+            background: var(--abt);
             border-radius: 10px;
             margin-top: 20px;
             animation: fadeIn 0.5s ease-out;

@@ -5,8 +5,10 @@
             --border-dark: 1px solid rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
             --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
-            --primary: #667eea;
-            --secondary: #764ba2;
+            --primary: #6a0dad;
+            --secondary: #9c27b0;
+            --tertiary: #667eea;
+            --neutral: #764ba2;
        }
 
        * {

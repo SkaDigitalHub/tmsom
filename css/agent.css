@@ -82,7 +82,7 @@
         }
         
         .ai-agent-image {
-            width: 50%;
+            width: auto;
             height: auto;
             border-radius: 50%;
             object-fit: contain;

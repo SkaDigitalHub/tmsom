@@ -7,8 +7,13 @@
             --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
             --primary: #6a0dad;
             --secondary: #9c27b0;
-            --tertiary: #667eea;
-            --neutral: #764ba2;
+            --accent: #e1bee7;
+            --text: #333;
+            --light: #f8f9fa;
+            --usm: #3A3A3A;
+            --back: #2C2C2C;
+            --main: #1A1A1A;
+            --abt: #E0E0E0;
        }
 
        * {

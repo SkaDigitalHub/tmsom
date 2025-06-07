@@ -82,8 +82,8 @@
         }
         
         .ai-agent-image {
-            width: auto;
-            height: auto;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             object-fit: contain;
             margin-bottom: 20px;

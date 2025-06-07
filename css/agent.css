@@ -307,7 +307,23 @@
             background-color: var(--primary);
             color: white;
         }
+
+        .download {
+            background-color: var(--primary);
+            color: var(--accent);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
         
+        .download:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
         .typing-indicator {
             display: flex;
             padding: 10px 15px;

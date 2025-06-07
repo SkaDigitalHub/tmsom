@@ -5,6 +5,7 @@
             --border-dark: 1px solid rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
             --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --front: white;
             --primary: #6a0dad;
             --secondary: #9c27b0;
             --accent: #e1bee7;
@@ -29,7 +30,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e1bee7 100%);
+            background: var(--front);
             padding: 20px;
             text-align: center;
         }
@@ -103,17 +104,17 @@
         }
         
         .btn-login {
-            background-color: #4CAF50;
+            background-color: var(--primary);
             color: white;
         }
         
         .btn-register {
-            background-color: #2196F3;
+            background-color: var(--accent);
             color: white;
         }
         
         .btn-learn {
-            background-color: #ff9800;
+            background-color: var(--secondary);
             color: white;
         }
         

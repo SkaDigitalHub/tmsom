@@ -398,7 +398,7 @@
             border: 1px solid var(--primary); 
             border-radius: 12px; 
             font-size: 1rem; 
-            color: white; 
+            color: var(--accent); 
             transition: all 0.3s ease; 
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
@@ -526,7 +526,7 @@
         body.dark-mode .error-message {
             background: rgba(46, 204, 113, 0.1);
             border: 1px solid rgba(46, 204, 113, 0.3);
-            color: var(--text);
+            color: var(--main);
         }
 
         @keyframes fadeIn {

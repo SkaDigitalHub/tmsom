@@ -83,7 +83,7 @@
         
         .ai-agent-image {
             width: 200px;
-            height: 200px;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 20px;
@@ -614,4 +614,12 @@
             transform: scale(1.1);
         }
 
- 
+ @media (max-width: 767px) { 
+         .chat-input {
+             width: 80%;
+         }
+         .chat-input input {
+            padding: 12px 10px;
+            font-size: 0.8rem;
+         }
+         

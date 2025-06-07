@@ -400,4 +400,11 @@
             document.querySelector('.mode-toggle').classList.add('light');
         }
  
- 
+function downloadFile() {
+  const link = document.createElement('a');
+  link.href = 'downloads/pdf/timetable1.pdf';
+  link.download = 'tmsom1stsem-timetable.pdf'; // Custom filename
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

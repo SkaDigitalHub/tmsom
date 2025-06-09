@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMSOM Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="btn"><a href="index.html"><i class="fa-solid fa-house"></i></a></div>
+        <!-- Dark Mode Toggle Button -->
+  <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+    <div class="form-container">
+        <h1>Enter Class</h1>
+        
+        <form id="attendanceForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdGAMwnl_--0RoZAPonLy_5YrYx3FFm6aDlZcf81kcXPO26Yg/formResponse" method="POST" target="_blank">
+            <div class="form-group">
+                <label for="fullname">Student Name</label>
+                <input type="text" id="fullname" name="entry.2026231768" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="pin">Registration Code</label>
+                <input type="password" id="pin" name="entry.1018946880" required 
+                       placeholder="Enter TMSOM code"
+                       min="25000" max="26000"
+                       oninput="validateRegistrationCode(this)">
+                <div id="pinError" class="validation-error">
+                    Please enter a valid code!
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">Join</button>
+        </form>
+
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
+            <h2>Attendance Recorded!</h2>
+            <p>Join the Class</p>
+            <button class="continue-btn" onclick="window.open('index.html', '_self')">Attend Class</button>
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
+            <h2>Login Failed</h2>
+            <p id="errorText">Please try again later.</p>
+        </div>
+    </div> 
+    </main>
+      <script src="script/login.js"></script>
+</body>
+</html> 

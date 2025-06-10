@@ -47,7 +47,7 @@ html, body, #jaas-container {
         position: absolute;
         bottom: 5px;
         right: 10px;
-        background: white;
+        background: none;
         border: none;
         font-size: 18px;
         cursor: pointer;

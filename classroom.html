@@ -12,7 +12,10 @@
       <iframe id="popup-iframe" src="attend.html" frameborder="0"></iframe>
     </div>
     
-    <button class="home-btn" onclick="window.location.href='index.html'">Home</button>
+  <button class="home-btn" onclick="if(confirm('Leave this page?')) { window.location.replace('index.html'); }">
+    <i class="fa-solid fa-house"></i>
+  </button>
+
     <div id="jaas-container"></div>
     
     <script src="script/classroom1.js"></script>

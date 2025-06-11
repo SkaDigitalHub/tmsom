@@ -1,7 +1,7 @@
 html, body, #jaas-container { 
-  height: 70%; 
+  height: 100%; 
   margin: 0; 
-  padding: 30px; 
+  padding: 10px; 
   font-size: 16px; /* Base font size for rem calculations */
 }
   

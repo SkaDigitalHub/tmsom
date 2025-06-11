@@ -95,6 +95,7 @@ html, body, #jaas-container {
   }
   
   .home-btn {
+    background: red;
     top: 0.625rem; /* 10px */
     right: 0.625rem; /* 10px */
     padding: 0.5rem 0.625rem; /* 8px 10px */

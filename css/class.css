@@ -1,7 +1,7 @@
 html, body, #jaas-container { 
-  height: 200px; 
+  height: 70%; 
   margin: 0; 
-  padding: 0; 
+  padding: 30px; 
   font-size: 16px; /* Base font size for rem calculations */
 }
   
@@ -76,10 +76,10 @@ html, body, #jaas-container {
 }
 
 /* Mobile responsive styles */
-@media only screen and (max-width: 37.5rem) { /* 600px */
+@media (max-width: 37.5rem) { /* 600px */
   .popup-container {
-    width: 90%;
-    height: 80%;
+    width: 90wh;
+    height: 70vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

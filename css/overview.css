@@ -1,0 +1,257 @@
+:root {
+    --primary: #6a0dad;
+    --secondary: #9c27b0;
+    --accent: #e1bee7;
+    --mainbg: white;
+    --bg: #f5f5f5;
+    --cardbg: #f0f0f0;
+    --vbtn: #4CAF50;
+    --name: #666;
+    --title: #333;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    padding: 20px;
+    background-color: var(--bg);
+}
+
+.container .legend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-1 {
+    grid-column: span 1;
+}
+
+.card-6 {
+    grid-column: span 3;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.card-1 .internal-divisions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.card-1 .division {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.course-list {
+    list-style: none;
+    grid-column: 1 / -1;
+}
+
+.course-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.course-item:last-child {
+    border-bottom: none;
+}
+
+.lecturer-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.course-info {
+    flex-grow: 1;
+}
+
+.course-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.lecturer-name {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.view-more {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.view-more:hover {
+    background-color: #45a049;
+}
+
+.card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .container .legend {
+        width: 100%;
+        grid-template-columns: 1fr;               
+    }
+    
+    .card-1 {
+        grid-column: span 1;
+    }
+    
+    .card-6 {
+        grid-column: span 1;
+        display: grid;
+        width: 100%;
+        gap: 15px;
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* Popup container styles */
+.popup-container {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    z-index: 1000;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 350px;
+    height: 500px;
+    display: none;
+    overflow: hidden;
+}
+
+.popup-container.show {
+    display: block;
+}
+
+#popup-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Popup button styles */
+.popup-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-popup-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Bio popup styles */
+.bio-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1001;
+    max-width: 400px;
+    width: 90%;
+    display: none;
+}
+
+.bio-popup.show {
+    display: block;
+}
+
+.bio-popup h3 {
+    color: #6a0dad;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.bio-popup p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.bio-popup .close-btn {
+    background: #6a0dad;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+.bio-popup .close-btn:hover {
+    background: #9c27b0;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+}
+
+.overlay.show {
+    display: block;
+} 

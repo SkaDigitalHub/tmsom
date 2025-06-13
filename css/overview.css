@@ -3,11 +3,16 @@
     --secondary: #9c27b0;
     --accent: #e1bee7;
     --mainbg: white;
-    --bg: #f5f5f5;
-    --cardbg: #f0f0f0;
+    --bg: #2C2C2C;
+    --cardbg: #3A3A3A;
+    --main: linear-gradient(135deg, #f5f7fa 0%, #e1bee7 100%);
     --vbtn: #4CAF50;
     --name: #666;
     --title: #333;
+    --darkbg: #1A1A1A;
+    --back: rgba(106, 13, 173, 0.1);
+    --item: rgba(106, 13, 173, 0.5);
+    --background: linear-gradient(135deg, #6e8efb, #a777e3);
 }
 
 * {
@@ -19,15 +24,16 @@
 
 body {
     padding: 20px;
-    background-color: var(--bg);
+    background-color: var(--back);
+    width: 100%;
     overflow-x: hidden;
-    color: #333;
+    color: var(--title);
     font-family: Arial, sans-serif;
     transition: background 0.3s ease;
 }
 
 body.dark-mode {
-    background: #121212;
+    background: var(--darkbg);
     color: #f4f4f9;
 }
 
@@ -39,7 +45,7 @@ body.dark-mode {
 
 /* Header Styles */
 .header {
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    background: var(--primary);
     color: white;
     top: 0;
     left: 0;
@@ -56,7 +62,7 @@ body.dark-mode {
 }
 
 body.dark-mode .header {
-    background: linear-gradient(135deg, #4a5bbf, #7d5ab8);
+    background: var(--primary);
 }
 
 /* Distinct menu button styles */
@@ -123,16 +129,16 @@ body.dark-mode .side-menu {
 }
 
 .menu-header {
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    background: var(--primary);
     padding: 1.25rem;
-    color: white;
+    color: var(--mainbg);
     display: flex;
     align-items: center;
     margin-bottom: 1.25rem;
 }
 
 body.dark-mode .menu-header {
-    background: linear-gradient(135deg, #4a5bbf, #7d5ab8);
+    background: var(--primary);
 }
 
 .menu-header img {
@@ -147,6 +153,7 @@ body.dark-mode .menu-header {
 .user-info h3 {
     font-size: 1rem;
     margin-bottom: 5px;
+    color: var(--mainbg);
 }
 
 .user-info p {
@@ -163,7 +170,7 @@ body.dark-mode .menu-header {
     padding: 0.94rem 1.55rem;
     display: flex;
     align-items: center;
-    color: #555;
+    color: var(--item);
     text-decoration: none;
     transition: all 0.2s;
 }
@@ -174,16 +181,16 @@ body.dark-mode .menu-item {
 
 .menu-item:hover {
     background-color: #f0f0f0;
-    color: #6e8efb;
+    color: var(--secondary);
 }
 
 body.dark-mode .menu-item:hover {
     background-color: #333;
-    color: #8da1ff;
+    color: var(--secondary);
 }
 
 .menu-item.active {
-    background-color: #e6e9ff;
+    background-color:  #e6e9ff;
     color: #6e8efb;
     border-left: 0.25rem solid #6e8efb;
 }
@@ -204,7 +211,7 @@ body.dark-mode .menu-item.active {
     border-top: 0.06rem solid #eee;
     text-align: center;
     font-size: 0.75rem;
-    color: #999;
+    color: var(--accent);
 }
 
 body.dark-mode .menu-footer {
@@ -239,21 +246,37 @@ body.dark-mode .menu-footer {
 
 .container .legend {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 20px;
     width: 100%;
+    align-items: center;
     max-width: 1200px;
-    margin: 0 auto;
+    margin-right: 50px;
 }
 
+h3, .course-name {
+    color: var(--primary);
+}
+
+ body.dark-mode h3, 
+  body.dark-mode .course-name {
+     color: var(--mainbg);
+ }
+
 .card {
-    background: white;
+    background: var(--mainbg);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    color: var(--title);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
+ body.dark-mode .card {
+     background: var(--bg);
+     color: var(--accent);
+ }
 
 .card-1 {
     grid-column: span 1;
@@ -274,9 +297,14 @@ body.dark-mode .menu-footer {
 }
 
 .card-1 .division {
-    background-color: #f0f0f0;
+    background-color: var(--back);
     padding: 15px;
     border-radius: 8px;
+}
+
+ body.dark-mode .division {
+    background-color: var(--cardbg);
+    color: var(--accent);
 }
 
 .course-list {
@@ -310,6 +338,7 @@ body.dark-mode .menu-footer {
 .course-name {
     font-weight: bold;
     margin-bottom: 5px;
+    color: var(--primary);
 }
 
 .lecturer-name {
@@ -317,8 +346,12 @@ body.dark-mode .menu-footer {
     font-size: 0.9em;
 }
 
+body.dark-mode .lecturer-name {
+    color: var(--accent);
+}
+
 .view-more {
-    background-color: #4CAF50;
+    background-color: var(--primary);
     color: white;
     border: none;
     padding: 8px 12px;
@@ -327,36 +360,28 @@ body.dark-mode .menu-footer {
     font-size: 0.8em;
 }
 
+body.dark-mode .view-more {
+    background-color: var(--primary);
+    color: var(--mainbg);
+}
+
 .view-more:hover {
-    background-color: #45a049;
+    background-color: var(--accent);
 }
 
 .card-title {
     font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 15px;
-    color: #333;
+    color: var(--primary);
     grid-column: 1 / -1;
 }
-
-@media (max-width: 768px) {
-    .container .legend {
-        width: 100%;
-        grid-template-columns: 1fr;               
-    }
-    
-    .card-1 {
-        grid-column: span 1;
-    }
-    
-    .card-6 {
-        grid-column: span 1;
-        display: grid;
-        width: 100%;
-        gap: 15px;
-        grid-template-columns: repeat(1, 1fr);
-    }
+ 
+body.dark-mode .card-title {
+    color: var(--mainbg);
 }
+
+
 
 /* Popup container styles */
 .popup-container {
@@ -371,6 +396,46 @@ body.dark-mode .menu-footer {
     height: 500px;
     display: none;
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .container {
+        grid-template-columns: 1fr; /* Single column layout for mobile */
+        gap: 15px;
+        width: 100%;
+        overflow: wrap;
+    }
+    
+    /* Make all cards span the full width */
+    .card {
+        overflow: hidden;
+        width: 100%;
+        grid-column: 1 !important; /* Force all cards to single column */
+        margin-bottom: 15px;
+    }
+    
+    /* Specifically target card-6 to ensure it's full width */
+    .card-6 {
+        grid-column: 1 !important;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    /* Ensure internal divisions in card-1 are full width */
+    .card-1 .internal-divisions {
+        width: 100%;
+    }
+    
+    /* Adjust padding for smaller screens */
+    .card {
+        padding: 15px;
+    }
 }
 
 .popup-container.show {
@@ -415,16 +480,20 @@ body.dark-mode .menu-footer {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-40%, -50%);
     background: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     z-index: 1001;
     max-width: 400px;
-    width: 90%;
+    width: 60%;
     display: none;
 }
+
+ body.dark-mode .bio-popup {
+     background: var(--primary);
+ }
 
 .bio-popup.show {
     display: block;
@@ -444,12 +513,17 @@ body.dark-mode .menu-footer {
 
 .bio-popup .close-btn {
     background: #6a0dad;
-    color: white;
+    color: var(--mainbg);
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
     float: right;
+}
+
+body.dark-mode .close-btn {
+    background: var(--mainbg);
+    color: var(--primary);
 }
 
 .bio-popup .close-btn:hover {
@@ -501,4 +575,3 @@ body.dark-mode .menu-footer {
     }
 }
 
- 

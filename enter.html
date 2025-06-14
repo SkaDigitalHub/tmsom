@@ -1,0 +1,93 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no" />
+    <script src='https://8x8.vc/vpaas-magic-cookie-9e0bef5962b4437b8851826b431c40da/external_api.js' async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="enter.css">
+    <title>TMSOM Classroom</title>
+</head>
+<body>
+            <!-- Header -->
+        <header class="header">
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="app-title">TMSOM</h1>
+            <div class="mode-toggle" onclick="toggleMode()">🌙</div>
+        </header>
+
+        <!-- Side Menu -->
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <img src="img/logo.png" alt="User">
+                <div class="user-info">
+                    <h3>TMSOM STUDENT PORTAL</h3>
+                    <p>Student</p>
+                </div>
+            </div>
+            <div class="menu-items">
+                <a href="index.html" class="menu-item">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="overview.html" class="menu-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="classroom.html" class="menu-item active">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Classroom</span>
+                </a>
+                <a href="library.html" class="menu-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Library</span>
+                </a>
+                <a href="chat.html" class="menu-item">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="activity.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>Activity</span>
+                </a>
+                <a href="more.html" class="menu-item">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>More</span>
+                </a>
+                <a href="privacy.html" class="menu-item">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Privacy Policy</span>
+                </a>
+                <a href="admin.html" class="menu-item">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Only Admin</span>
+                </a>
+            </div>
+            <div class="menu-footer">
+                <p>Version 1.0.0</p>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    
+    <div style="bottom: 15px;">m</div>
+    <br><br>
+    
+    <button class="popup-btn" onclick="togglePopup()">+</button>
+    <div id="popup" class="popup-container">
+      <button class="close-btn" onclick="togglePopup()">×</button>
+      <iframe id="popup-iframe" src="https://skadigitalhub.github.io/tmsom/attend.html" frameborder="0"></iframe>
+    </div>
+    
+  <button class="home-btn" onclick="if(confirm('Leave this page?')) { window.location.replace('index.html'); }">
+    <i class="fa-solid fa-house"></i>
+  </button>
+
+    <div id="jaas-container"></div>
+    
+    <script src="enter.js"></script>
+</body>
+</html>

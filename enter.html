@@ -82,9 +82,13 @@
       <iframe id="popup-iframe" src="attend.html" frameborder="0"></iframe>
     </div>
     
-  <button class="home-btn" onclick="showConfirm()">
+  <button class="home-btn" onclick="togglePopup()">
     <i class="fa-solid fa-house"></i>
   </button>
+ <div id="popup" class="popup-container">
+      <button class="close-btn" onclick="togglePopup()">×</button>
+      <iframe id="popup-iframe" src="attend.html" frameborder="0"></iframe>
+    </div>
 
     <div id="jaas-container"></div>
 

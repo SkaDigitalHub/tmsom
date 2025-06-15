@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no" />   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="classchat.css">
+    <title>TMSOM Chat</title>
+</head>
+<body>
+            <!-- Header -->
+        <header class="header">
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="app-title">TMSOM</h1>
+            <div class="mode-toggle" onclick="toggleMode()">🌙</div>
+        </header>
+
+        <!-- Side Menu -->
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <img src="logo/main.png" alt="logo">
+                <div class="user-info">
+                    <h3>TMSOM STUDENT PORTAL</h3>
+                    <p>Student</p>
+                </div>
+            </div>
+            <div class="menu-items">
+                <a onclick="showConfirm()" class="menu-item">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a onclick="window.location.replace('overview.html')" class="menu-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Overview</span>
+                </a>
+                <a onclick="window.location.replace('classroom.html')" class="menu-item">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Classroom</span>
+                </a>
+                <a onclick="window.location.replace('library.html')" class="menu-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Library</span>
+                </a>
+                <a onclick="window.location.replace('chat.html')" class="menu-item active">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+                <a onclick="window.location.replace('activity.html')" class="menu-item">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>Activity</span>
+                </a>
+                <a onclick="window.location.replace('more.html')" class="menu-item">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>More</span>
+                </a>
+                <a onclick="window.location.replace('privacy.html')" class="menu-item">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Privacy Policy</span>
+                </a>
+                <a onclick="window.location.replace('admin.html')" class="menu-item">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Only Admin</span>
+                </a>
+          </div>
+            <div class="menu-footer">
+                <p>Version 1.0.0</p>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    <br>
+    <br>
+    
+               <!-- Chat -->
+        <body class="theme-default">
+  <!-- Username Modal -->
+  <div id="username-modal">
+    <div class="modal-content glass">
+      <h2>Enter Your Username</h2>
+      <input type="text" id="username-input" placeholder="Username" />
+      <button onclick="setUsername()">Enter</button>
+    </div>
+  </div>
+
+              <!-- Main Container -->
+  <div class="container">
+    <!-- User List -->
+    <div id="user-list">
+      <div class="user-avatar group" data-user="GROUP">GRO</div>
+    </div>
+
+    <!-- Chat Window and Input -->
+    <div style="flex: 1;">
+      <!-- Chat Window -->
+      <div id="chat-window" class="glass"></div>
+
+      <!-- Message Input -->
+      <div id="message-input">
+        <input type="text" id="message" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+        <button class="video-call-btn" onclick="window.open('https://meet.jit.si/GRWCChurchConference', '_blank')">
+          <i class="fas fa-video"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Theme Selector -->
+    <div id="theme-selector">
+      <div class="theme-dot active" data-theme="default" style="background-color: #f4f4f9;"></div>
+      <div class="theme-dot" data-theme="blue" style="background-color: #e3f2fd;"></div>
+      <div class="theme-dot" data-theme="green" style="background-color: #e8f5e9;"></div>
+      <div class="theme-dot" data-theme="purple" style="background-color: #f3e5f5;"></div>
+      <div class="theme-dot" data-theme="dark" style="background-color: #333;"></div>
+    </div>
+  </div>                
+                 
+    <!-- Leave Page -->
+    <div id="customConfirm">
+        <div>
+    <p id="confirmMessage">Leave this page?</p>
+        <div class="modal-buttons">
+    <button class="yes" onclick="confirmLeave(true)">Yes</button>
+    <button class="no" onclick="confirmLeave(false)">No</button>
+        </div>        
+ </div>
+   </div>
+    
+    <script src="classchat.js"></script>
+</body>
+</html>

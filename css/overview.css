@@ -480,7 +480,7 @@ body.dark-mode .card-title {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-40%, -50%);
+    transform: translate(-50%, -40%);
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -528,6 +528,11 @@ body.dark-mode .close-btn {
 
 .bio-popup .close-btn:hover {
     background: #9c27b0;
+}
+
+body.dark-mode .bio-popup .close-btn:hover {
+    background: var(--accent);
+    color: var(--primary);
 }
 
 /* Dark Mode Toggle Button - Protected from other button styles */

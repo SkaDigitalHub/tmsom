@@ -2,60 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TMSOM Attendance</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/attend.css">
 </head>
 <body>
     <div class="btn">
-  <a href="index.html" onclick="window.location.replace('index.html'); return false;">
-    <i class="fa-solid fa-house"></i>
-  </a>
-</div>
-        <!-- Dark Mode Toggle Button -->
-  <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+        <a href="index.html">
+            <i class="fa-solid fa-house"></i>
+        </a>
+    </div>
+    <!-- Dark Mode Toggle Button -->
+    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
     
     <!-- Main Content -->
     <main class="main-content">
-    <div class="form-container">
-        <h1>Submit Attendance</h1>
-        
-        <form id="attendanceForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdGAMwnl_--0RoZAPonLy_5YrYx3FFm6aDlZcf81kcXPO26Yg/formResponse" method="POST" target="_blank">
+        <div class="form-container">
+            <h1>Submit Attendance</h1>
+            
+            <form id="attendanceForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdGAMwnl_--0RoZAPonLy_5YrYx3FFm6aDlZcf81kcXPO26Yg/formResponse" method="POST" target="_blank">
             <div class="form-group">
-                <label for="fullname">Student Name</label>
-                <input type="text" id="fullname" name="entry.2026231768" required placeholder="Enter your full name">
-            </div>
-
-            <div class="form-group">
-                <label for="pin">Registration Code</label>
-                <input type="password" id="pin" name="entry.1018946880" required 
-                       placeholder="Enter TMSOM code"
-                       min="25000" max="26000"
-                       oninput="validateRegistrationCode(this)">
-                <div id="pinError" class="validation-error">
-                    Please enter a valid code!
+                    <label for="nameInput">Search Username</label>
+                    <input list="nameOptions" id="nameInput" name="entry.2026231768" required placeholder="Enter your full name">
+                    <datalist id="nameOptions">
+                        <option value="Robert Shome Mills" data-code="25001"></option>
+                        <option value="Sarah Wilson" data-code="25002"></option>
+                        <option value="Williams Adu Louis" data-code="25003"></option>
+                        <option value="Wisdom Nelly Amuzugah" data-code="25004"></option>
+                        <option value="Daniel Kumi" data-code="25005"></option>
+                        <option value="Obed Ansah" data-code="25006"></option>
+                        <option value="Bernice Ohenewaa" data-code="25007"></option>
+                        <option value="Derrick Addae" data-code="25008"></option>
+                        <option value="Sie Joshua Obeng" data-code="25009"></option>
+                        <option value="Josephine Ampomah" data-code="25010"></option>
+                        <option value="Godwin Korbla Aborhor" data-code="25011"></option>
+                        <option value="Kumi Mary" data-code="25012"></option>
+                        <option value="Dussey Daniel Edem" data-code="25013"></option>
+                        <option value="Emmanuel Panful" data-code="25014"></option>
+                        <option value="Jewel Ofori Yeboah" data-code="25015"></option>
+                        <option value="Esther Quarm" data-code="25016"></option>
+                        <option value="Beatrice Gati" data-code="25017"></option>
+                        <option value="Daniel Sakyi" data-code="25018"></option>
+                        <option value="Anaman Ebenezer" data-code="25019"></option>
+                        <option value="Anim Simon" data-code="25020"></option>
+                        <option value="Milland Appah Peniel" data-code="25021"></option>
+                        <option value="Theophilus Hagan" data-code="25022"></option>
+                        <option value="Setsoafia Justice Gborgbor" data-code="25023"></option>
+                        <option value="Danquah Mcstephen" data-code="25024"></option>
+                        <option value="Stephanie Ojugo" data-code="25025"></option>
+                        <option value="lecturer" data-code="25999"></option>
+                        <option value="Admin" data-code="25999"></option>    
+                    </datalist>
                 </div>
+
+                <div class="form-group">
+                    <label for="codeInput">Registration Code</label>
+                    <input type="password" id="codeInput" name="entry.1018946880" required 
+                           placeholder="Enter TMSOM code" autocomplete="off">
+                    <div id="pinError" class="validation-error">
+                        Please enter a valid code (25001-25025 or 25999)!
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn">Submit</button>
+            </form>
+
+            <div id="successMessage" class="success-message">
+                <i class="fas fa-check-circle"></i>
+                <h2>Attendance Recorded!</h2>
+                <p>Join the Class</p>
+                <button class="continue-btn" onclick="window.location.href='live.html'">Attend Class</button>
             </div>
 
-            <button type="submit" id="submitBtn">Submit</button>
-        </form>
-
-        <div id="successMessage" class="success-message">
-            <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
-            <h2>Attendance Recorded!</h2>
-            <p>Join the Class</p>
-            <button class="continue-btn" onclick="window.open('live.html', '_self')">Attend Class</button>
-        </div>
-
-        <div id="errorMessage" class="error-message">
-            <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
-            <h2>Submission Failed</h2>
-            <p id="errorText">Please try again later.</p>
-        </div>
-    </div> 
+            <div id="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <h2>Submission Failed</h2>
+                <p id="errorText">Please try again later.</p>
+            </div>
+        </div> 
     </main>
-      <script src="script/login.js"></script>
+    <script src="script/attend.js"></script>
 </body>
-</html> 
+    </html>

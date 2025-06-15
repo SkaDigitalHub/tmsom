@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="menu-items">
-                <a onclick="if(confirm('Leave this page?')) { window.location.replace('index.html'); }" class="menu-item">
+                <a onclick="showConfirm()" class="menu-item">
                     <i class="fa-solid fa-home"></i>
                     <span>Home</span>
                 </a>
@@ -82,11 +82,22 @@
       <iframe id="popup-iframe" src="attend.html" frameborder="0"></iframe>
     </div>
     
-  <button class="home-btn" onclick="if(confirm('Leave this page?')) { window.location.replace('index.html'); }">
+  <button class="home-btn" onclick="showConfirm()">
     <i class="fa-solid fa-house"></i>
   </button>
 
     <div id="jaas-container"></div>
+
+        <!-- Leave Page -->
+    <div id="customConfirm">
+        <div>
+    <p id="confirmMessage">Leave this page?</p>
+        <div class="modal-buttons">
+    <button class="yes" onclick="confirmLeave(true)">Yes</button>
+    <button class="no" onclick="confirmLeave(false)">No</button>
+        </div>        
+ </div>
+    </div>
     
     <script src="script/enter.js"></script>
 </body>

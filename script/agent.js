@@ -411,8 +411,15 @@
            document.body.removeChild(link);
       }
 
-         // Leave Page
+// Leave Page
          function showConfirm() {
-            document.getElementById('confirmMessage').textContent = 'Leave ' + document.title + '?';
-            document.getElementById('customConfirm').style.display = 'block';
+      document.getElementById('confirmMessage').textContent = 'Leave ' + document.title + '?';
+      document.getElementById('customConfirm').style.display = 'block';
    }
+
+         function confirmLeave(choice) {
+      document.getElementById('customConfirm').style.display = 'none';
+      if(choice) {
+      window.location.replace('index.html');
+  }
+         }

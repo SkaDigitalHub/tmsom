@@ -401,7 +401,7 @@
         }
 
 
-           // Leave Page
+           // Download 
         function downloadFile() {
            const link = document.createElement('a');
            link.href = 'downloads/pdf/timetable1.pdf';

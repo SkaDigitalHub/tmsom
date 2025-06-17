@@ -54,15 +54,13 @@
                 </div>
 
             <div class="form-group">
-                <label for="pin">Registration Code</label>
-                <input type="password" id="pin" name="entry.1840589285" required 
-                       placeholder="Enter TMSOM code"
-                       min="25000" max="26000"
-                       oninput="validateRegistrationCode(this)">
-                <div id="pinError" class="validation-error">
-                    Please enter a valid code!
+                    <label for="codeInput">Registration Code</label>
+                    <input type="password" id="codeInput" name="entry.1018946880" required 
+                           placeholder="Enter TMSOM code" autocomplete="off">
+                    <div id="pinError" class="validation-error">
+                        Please enter a valid code!
+                    </div>
                 </div>
-            </div>
 
             <button type="submit" id="submitBtn">Log In</button>
         </form>

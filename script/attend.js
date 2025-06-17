@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "Setsoafia Justice Gborgbor": "25023",
         "Danquah Mcstephen": "25024",
         "Stephanie Ojugo": "25025",
-        "Lecturer": "25999"
+        "Lecturer": "25999",
         "Admin": "25990"
     };
 

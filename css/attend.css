@@ -29,9 +29,9 @@ body.dark-mode {
 .btn {
     position: fixed;
     top: 1.0rem;
-    left: 1.25rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    left: 1.0rem;
+    width: 1.8rem;
+    height: 1.8rem;
     z-index: 100;
     border-radius: 50%;
     background-color: rgba(106, 13, 173, 0.2);
@@ -52,7 +52,7 @@ body.dark-mode {
 
 .fa-house {
     color: #6a0dad;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
 }
 
 body.dark-mode .fa-house {
@@ -63,9 +63,9 @@ body.dark-mode .fa-house {
 .mode-toggle {
     position: fixed;
     top: 1.0rem;
-    right: 1.25rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    right: 1.0rem;
+    width: 1.8rem;
+    height: 1.8rem;
     z-index: 100;
     border-radius: 50%;
     background-color: rgba(30, 30, 30, 0.2);
@@ -77,7 +77,7 @@ body.dark-mode .fa-house {
     justify-content: center;
     box-shadow: 0 0.13rem 0.31rem rgba(0, 0, 0, 0.2);
     transition: all 0.3s;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
 }
 
 body.dark-mode .mode-toggle {

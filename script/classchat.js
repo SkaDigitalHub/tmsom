@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.getElementById('message');
     const userList = document.getElementById('user-list');
     const themeSelector = document.getElementById('theme-selector');
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzvMIpB50e94TqXUELT5aAPVhe4a_O_uYBl2yiaF4TbCICk5Fr61kXeJN-S3CKiZu_8/exec'; // Replace with your Web App URL
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbwkDO34ZMUe-PwNHbUK9bJiXTYfPgGawyqT18qLhJeDl9IedZeB0Q-bOcZlF1QUkOpy/exec'; // Replace with your Web App URL
 
     let sender = null;
     let receiver = null;

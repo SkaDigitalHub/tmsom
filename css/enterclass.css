@@ -300,14 +300,14 @@ html, body, #jaas-container {
       .popup-btn {
         position: fixed;
         bottom: 60px;
-        left: 30px;
+        left: 50px;
         z-index: 1000;
         background: #4CAF50;
         color: white;
         border: none;
         border-radius: 50%;
-        width: 20px;
-        height: 20px;
+        width: 60px;
+        height: 60px;
         font-size: 15px;
         cursor: pointer;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);

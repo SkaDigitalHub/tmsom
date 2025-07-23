@@ -93,9 +93,17 @@
         const buttons = document.querySelectorAll('.course-btn');
         const iframeContainer = document.getElementById('iframeContainer');
         const iframe = iframeContainer.querySelector('iframe');
-        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSf5hfylWOF5-Vg-zX0_omXe0oscdph06tR_9OT5HKyp0B6wPQ/viewform?embedded=true";
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;
+
+        // Course form URLs
+        const formUrls = {
+            prophetic: "https://docs.google.com/forms/d/e/1FAIpQLSf5hfylWOF5-Vg-zX0_omXe0oscdph06tR_9OT5HKyp0B6wPQ/viewform?embedded=true",
+            prayer: "https://docs.google.com/forms/d/e/1FAIpQLSdummy1prayerform/viewform?embedded=true",
+            leadership: "https://docs.google.com/forms/d/e/1FAIpQLSdummy2leadershipform/viewform?embedded=true",
+            pneuma: "https://docs.google.com/forms/d/e/1FAIpQLSdummy3pneumatologyform/viewform?embedded=true",
+            homiletic: "https://docs.google.com/forms/d/e/1FAIpQLSdummy4homileticsform/viewform?embedded=true"
+        };
 
         // Dark mode toggle functionality
         darkModeToggle.addEventListener('click', () => {
@@ -115,8 +123,9 @@
 
         buttons.forEach(button => {
             button.addEventListener('click', () => {
-                // Set the iframe source
-                iframe.src = formUrl;
+                const course = button.getAttribute('data-course');
+                // Set the iframe source based on course
+                iframe.src = formUrls[course];
                 
                 // Show the iframe container
                 iframeContainer.classList.add('active');

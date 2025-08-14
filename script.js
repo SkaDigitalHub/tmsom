@@ -70,6 +70,24 @@
             }
         });
 
+
+// In your app.js
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/tmsom/sw.js');
+      console.log('SW registered:', reg);
+      
+      // Check for updates hourly
+      setInterval(() => reg.update(), 60 * 60 * 1000);
+    } catch (e) {
+      console.log('SW registration failed:', e);
+    }
+  });
+}
+
+
+   // Form submission 
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('attendanceForm');
             const submitBtn = document.getElementById('submitBtn');

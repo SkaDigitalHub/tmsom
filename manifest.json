@@ -5,6 +5,22 @@
   "display": "standalone",
   "background_color": "green",
   "theme_color": "#8A1878",
+  "description": "Platform to access TMSOM",
+  "categories": [
+    "education"
+  ],
+  "author": "SkaDigital Hub",
+  "screenshots": [
+    {
+      "src": "assets/img/screen1.png"
+    },
+    {
+      "src": "assets/img/screen2.png"
+    },
+    {
+      "src": "assets/img/screen3.png"
+    }
+  ],
   "icons": [
     {
       "src": "logo/main.png",

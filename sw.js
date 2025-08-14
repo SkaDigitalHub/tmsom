@@ -3,10 +3,10 @@ const urlsToCache = [
   './',                // Relative to the service worker's path
   './index.html',
   './logo/main.png',
-  './css/main.css'
-  '/reg/script.js'
-  './styles.css'
-  '/script.js'
+  './css/main.css',
+  './reg/script.js',
+  './styles.css',
+  './script.js'
   // Add other critical assets (CSS, JS, etc.)
 ];
 

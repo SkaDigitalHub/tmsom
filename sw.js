@@ -1,54 +1,104 @@
-const CACHE_NAME = 'TMSOM-App-v1';  // ← Versioned for updates
-const urlsToCache = [
-  './',                // Relative to the service worker's path
+// ===== TMSOM Service Worker =====
+// Version: v2.1 (Updated caching strategy)
+const CACHE_NAME = 'TMSOM-App-v2';  // Updated version forces cache refresh
+const RUNTIME_CACHE = 'TMSOM-Runtime';
+const OFFLINE_URL = './offline.html';  // Relative to SW location
+
+// Core assets to cache immediately on install
+const PRECACHE_ASSETS = [
+  './',
   './index.html',
+  './offline.html',  // Critical offline fallback
+  './logo/main.png',
   './logo/main.png',
   './css/main.css',
-  './reg/script.js',
-  './styles.css',
-  './script.js'
-  // Add other critical assets (CSS, JS, etc.)
+  '.styles.css',
+  './script.js',
+  './manifest.json'
 ];
 
-// Install: Cache static assets
+// ===== INSTALL =====
 self.addEventListener('install', (event) => {
+  console.log('[SW] Installing version:', CACHE_NAME);
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
-      .catch((err) => console.log('Cache install error:', err))
-  );
-});
-
-// Fetch: Cache-first, then network fallback
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached file if found
-        if (response) return response;
-        // Otherwise fetch, then cache the new response
-        return fetch(event.request).then((fetchResponse) => {
-          if (!fetchResponse || fetchResponse.status !== 200) return fetchResponse;
-          // Clone the response to cache it
-          const responseToCache = fetchResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return fetchResponse;
-        });
+      .then(cache => {
+        console.log('[SW] Caching core assets');
+        return cache.addAll(PRECACHE_ASSETS);
       })
+      .then(() => self.skipWaiting())  // Activate immediately
+      .catch(err => console.error('[SW] Install failed:', err))
   );
 });
 
-// Activate: Clean up old caches
+// ===== ACTIVATE =====
 self.addEventListener('activate', (event) => {
+  console.log('[SW] Activated');
+  
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) return caches.delete(cache);
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME && cache !== RUNTIME_CACHE) {
+            console.log('[SW] Removing old cache:', cache);
+            return caches.delete(cache);
+          }
         })
       );
     })
+    .then(() => self.clients.claim())  // Control all open pages
   );
+});
+
+// ===== FETCH HANDLER =====
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Skip non-GET requests and cross-origin requests
+  if (request.method !== 'GET' || !url.origin.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // HTML requests (Network first, with offline fallback)
+  if (request.headers.get('accept').includes('text/html')) {
+    event.respondWith(
+      fetch(request)
+        .then(networkResponse => networkResponse)
+        .catch(() => caches.match(OFFLINE_URL))
+    );
+    return;
+  }
+
+  // API requests (Network first, cache fallback)
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then(networkResponse => {
+          // Cache successful API responses
+          const clonedResponse = networkResponse.clone();
+          caches.open(RUNTIME_CACHE)
+            .then(cache => cache.put(request, clonedResponse));
+          return networkResponse;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Static assets (Cache first, network fallback)
+  event.respondWith(
+    caches.match(request)
+      .then(cachedResponse => cachedResponse || fetch(request))
+  );
+});
+
+// ===== OFFLINE DETECTION =====
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'CHECK_ONLINE_STATUS') {
+    fetch('./is-online.txt', { method: 'HEAD', cache: 'no-store' })
+      .then(() => event.source.postMessage({ isOnline: true }))
+      .catch(() => event.source.postMessage({ isOnline: false }));
+  }
 });

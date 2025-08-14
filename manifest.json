@@ -54,18 +54,19 @@
   ],
   "shortcuts": [
     {
-      "name": "Dashboard",
-      "short_name": "Home",
-      "url": "/tmsom/dashboard",
+      "name": "TMSOM AI Agent",
+      "short_name": "AI Agent",
+      "url": "/tmsom/agent.html",
       "icons": [{
         "src": "logo/icon-96.png",
         "sizes": "96x96"
       }]
     },
     {
-      "name": "New Lesson",
-      "url": "/tmsom/lessons/new",
-      "description": "Start a new learning session"
+      "name": "Log in",
+      "short_name": "Login",
+      "url": "/tmsom/login",
+      "description": "Start a new session"
     }
   ],
   "share_target": {

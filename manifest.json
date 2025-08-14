@@ -78,10 +78,12 @@
     }
   },
   "file_handlers": [{
-    "action": "/tmsom/open-file",
+    "action": "/tmsom/pdf-viewer",
     "accept": {
-      "application/pdf": [".pdf"]
-    }
+      "application/pdf": [".pdf"],
+      "application/octet-stream": [".pdf"],  // Fallback for Linux/Windows
+      "application/vnd.pdf": [".pdf"]       // For ChromeOS and Android
+    },
   }],
   "protocol_handlers": [{
     "protocol": "web+tmsom",

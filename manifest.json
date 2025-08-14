@@ -35,19 +35,19 @@
   ],
   "icons": [
     {
-      "src": "logo/icon-192.png",
+      "src": "img/logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "logo/icon-512.png",
+      "src": "img/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "logo/icon-144.png",
+      "src": "img/logo.png",
       "sizes": "144x144",
       "type": "image/png"
     }
@@ -58,7 +58,7 @@
       "short_name": "AI Agent",
       "url": "/tmsom/agent.html",
       "icons": [{
-        "src": "logo/icon-96.png",
+        "src": "img/agent.avatar.png",
         "sizes": "96x96"
       }]
     },

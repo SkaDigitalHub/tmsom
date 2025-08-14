@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMSOM PDF Viewer</title>
+  <style>
+    :root {
+      --primary: #8A1878;
+      --secondary: #008000;
+    }
+    #toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: #f5f5f5;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    #viewer-container {
+      overflow: auto;
+      margin: 0 auto;
+      max-width: 900px;
+    }
+    .page-container {
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      #viewer-container { padding: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <button id="prev" aria-label="Previous page">◀</button>
+    <input type="number" id="page_selector" min="1" value="1">
+    <span id="page_count">/ 0</span>
+    <button id="next" aria-label="Next page">▶</button>
+    <input type="text" id="search" placeholder="Search...">
+    <button id="download">Save PDF</button>
+    <span id="status"></span>
+  </div>
+  
+  <div id="viewer-container"></div>
+
+  <div id="fallback-ui" style="display: none;">
+  <input type="file" id="file-input" accept=".pdf">
+</div>
+
+  <!-- PDF.js with Tree-Shaking -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script type="module" src="js/pdf-handler.js"></script>
+</body>
+</html>

@@ -56,7 +56,7 @@
     {
       "name": "TMSOM AI Agent",
       "short_name": "AI Agent",
-      "url": "/tmsom/agent.html",
+      "url": "/tmsom/agent",
       "icons": [{
         "src": "img/agent.avatar.png",
         "sizes": "96x96"

@@ -1,36 +1,90 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "TMSOM App",
   "short_name": "TMSOM",
-  "start_url": "/tmsom/index.html",
+  "start_url": "/tmsom/index.html?utm_source=pwa",
+  "scope": "/tmsom/",
   "display": "standalone",
-  "background_color": "green",
+  "display_override": ["window-controls-overlay", "minimal-ui"],
+  "background_color": "#008000", // Changed from green to HEX
   "theme_color": "#8A1878",
-  "description": "Platform to access TMSOM",
-  "categories": [
-    "education"
-  ],
-  "author": "SkaDigital Hub",
+  "description": "Comprehensive platform for TMSOM education access",
+  "categories": ["education", "productivity"],
+  "author": {
+    "name": "SkaDigital Hub",
+    "website": "https://skadigitalhub.github.io/SkaApps"
+  },
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "en-US",
+  "prefer_related_applications": false,
   "screenshots": [
     {
-      "src": "assets/img/screen1.png"
+      "src": "assets/img/screen1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard View"
     },
     {
-      "src": "assets/img/screen2.png"
-    },
-    {
-      "src": "assets/img/screen3.png"
+      "src": "assets/img/screen2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "icons": [
     {
-      "src": "logo/main.png",
+      "src": "logo/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo/main.png",
+      "src": "logo/icon-512.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo/icon-144.png",
+      "sizes": "144x144",
       "type": "image/png"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "url": "/tmsom/dashboard",
+      "icons": [{
+        "src": "logo/icon-96.png",
+        "sizes": "96x96"
+      }]
+    },
+    {
+      "name": "New Lesson",
+      "url": "/tmsom/lessons/new",
+      "description": "Start a new learning session"
+    }
+  ],
+  "share_target": {
+    "action": "/tmsom/share",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "file_handlers": [{
+    "action": "/tmsom/open-file",
+    "accept": {
+      "application/pdf": [".pdf"]
+    }
+  }],
+  "protocol_handlers": [{
+    "protocol": "web+tmsom",
+    "url": "/tmsom/?url=%s"
+  }]
 }

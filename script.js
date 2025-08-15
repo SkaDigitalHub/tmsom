@@ -163,31 +163,68 @@ if (location.pathname.includes('login')) {
 
 
 
-// ===== TMSOM ALARM SYSTEM =====
-// Define the function globally
-window.setupAlarm = function() {
-  // TEST: Set alarm for 1 minute from now
-  const now = new Date();
-  const testTime = new Date(now.getTime() + 60000); 
-  
-  console.log("TEST ALARM WILL TRIGGER AT:", testTime.toLocaleString());
+// ===== TMSOM LECTURE ALARM SYSTEM =====
+// Production-ready with snooze and "Join Now" action
 
+// 1. Configuration
+const ALARM_CONFIG = {
+  icon: "/tmsom/logo/main.png",
+  vibration: [200, 100, 200, 100, 200], // Pulse pattern
+  actions: [
+    { action: "join", title: "Join Now" },
+    { action: "snooze", title: "Snooze (10 mins)" }
+  ]
+};
+
+// 2. Main Alarm Function
+function setupSundayAlarm() {
+  // Calculate next Sunday 7:00 PM GMT
+  const now = new Date();
+  const nextSunday = new Date();
+  
+  nextSunday.setDate(now.getDate() + (7 - now.getDay()));
+  nextSunday.setHours(19, 0, 0, 0); // 7PM GMT
+  
+  if (nextSunday < now) nextSunday.setDate(nextSunday.getDate() + 7);
+
+  console.log("⏰ Next lecture:", nextSunday.toUTCString());
+
+  // Set up the alarm
   Notification.requestPermission().then(perm => {
     if (perm === "granted") {
       const checkAlarm = setInterval(() => {
-        if (new Date() >= testTime) {
-          new Notification("TMSOM TEST", {
-            body: "Alarm is working!",
-            icon: "/tmsom/logo/main.png",
-            vibrate: [200, 100, 200]
-          });
-          clearInterval(checkAlarm);
-          console.log("TEST ALARM FIRED");
+        if (new Date() >= nextSunday) {
+          triggerAlarm();
+          nextSunday.setDate(nextSunday.getDate() + 7); // Schedule next week
         }
-      }, 1000); // Check every second
+      }, 60000); // Check every minute
     }
   });
-};
+}
 
-// Automatically run when page loads
-window.addEventListener('load', setupAlarm);
+// 3. Notification Trigger
+function triggerAlarm() {
+  const notification = new Notification("TMSOM Lecture Starting", {
+    body: "Your weekly lecture is live now!",
+    ...ALARM_CONFIG
+  });
+
+  // Handle button clicks
+  notification.onclick = (event) => {
+    event.preventDefault();
+    if (event.action === "join") {
+      window.location.href = "/tmsom/login";
+    } else if (event.action === "snooze") {
+      setTimeout(triggerAlarm, 10 * 60 * 1000); // Snooze for 10 mins
+    }
+  };
+}
+
+// 5. Start the System
+window.addEventListener('load', () => {
+  // Start main alarm
+  setupSundayAlarm();
+  
+  // For testing: expose to console
+  window.testAlarm = triggerAlarm;
+});

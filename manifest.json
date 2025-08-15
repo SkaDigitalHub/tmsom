@@ -43,10 +43,11 @@
     {
       "src": "/tmsom/assets/img/screen1.png",
       "sizes": "1617x1012",
-      "type": "image/png"
+      "type": "image/png",
+      "platform": "wide"
     },
     {
-      "src": "/tmsom/assets/img/screen2.png",
+      "src": "/tmsom/logo/main.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow"

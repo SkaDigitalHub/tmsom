@@ -6,6 +6,7 @@
     <title>The Mandate School of Ministry</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="logo/main.png" type="image/png">
     <link rel="apple-touch-icon" href="logo/main.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -32,7 +33,7 @@
 // Register Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js', { 
+    navigator.serviceWorker.register('/sw.js', { 
       scope: '/tmsom/' 
     })
     .then(reg => console.log('SW registered:', reg))

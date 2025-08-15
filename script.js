@@ -157,7 +157,7 @@ function registerSync() {
 }
 
 // Call on login
-if (location.pathname.includes('login')) {
+if (location.pathname.includes('/login.html')) {
   registerSync();
 }
 

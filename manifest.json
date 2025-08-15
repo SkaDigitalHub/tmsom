@@ -10,6 +10,8 @@
   "orientation": "any",
   "background_color": "#008000",
   "related_applications": [],
+  "dir": "ltr",
+  "lang": "en",
   "prefer_related_applications": false,
   "display_override": ["window-controls-overlay"],
   "launch_handler": {
@@ -17,22 +19,22 @@
   },
   "icons": [
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "48x48",
       "type": "image/png"
     },
     {
-      "src": "img/logo.png",
+      "src": "logo/main.png",
       "sizes": "24x24",
       "type": "image/png"
     }
@@ -58,7 +60,7 @@
       "short_name": "Agent",
       "description": "Open the AI Agent page",
       "url": "/agent",
-      "icons": [{ "src": "img/agent.avatar.png", "sizes": "192x192" }]
+      "icons": [{ "src": "logo/agent.png", "sizes": "192x192" }]
     }
   ]
 }

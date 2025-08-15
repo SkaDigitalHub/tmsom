@@ -25,7 +25,21 @@
 
     <!-- Dark Mode Toggle Button -->
   <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+
+<script src="script.js"></script>
     
-    <script src="script.js"></script>
+    <script>
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', { 
+      scope: '/tmsom/' 
+    })
+    .then(reg => console.log('SW registered:', reg))
+    .catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+    
 </body>
 </html>

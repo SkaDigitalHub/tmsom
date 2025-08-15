@@ -146,7 +146,7 @@ async function updateFeatures() {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   if (event.action === 'join') {
-    clients.openWindow('/tmsom/enter');
+    clients.openWindow('/tmsom/enter.html');
   } else if (event.action === 'snooze') {
     event.waitUntil(
       self.registration.showNotification("Reminder Set", {

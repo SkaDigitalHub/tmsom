@@ -71,21 +71,6 @@
         });
 
 
-// In your app.js
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const reg = await navigator.serviceWorker.register('/tmsom/sw.js');
-      console.log('SW registered:', reg);
-      
-      // Check for updates hourly
-      setInterval(() => reg.update(), 60 * 60 * 1000);
-    } catch (e) {
-      console.log('SW registration failed:', e);
-    }
-  });
-}
-
 
    // Form submission 
         document.addEventListener('DOMContentLoaded', function() {
@@ -131,6 +116,30 @@ if ('serviceWorker' in navigator) {
             });
         });
 
+
+
+  // In your app.js
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/tmsom/sw.js');
+      console.log('SW registered:', reg);
+      
+      // Check for updates hourly
+      setInterval(() => reg.update(), 60 * 60 * 1000);
+    } catch (e) {
+      console.log('SW registration failed:', e);
+    }
+  });
+}
+
+
+// In your main JS file: background sync
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+  navigator.serviceWorker.ready.then(reg => {
+    reg.sync.register('sync-features');
+  });
+}
 
 
 // Register sync for all features

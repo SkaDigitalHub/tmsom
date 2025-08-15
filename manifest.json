@@ -94,7 +94,7 @@
       "application/pdf": [".pdf"],
       "application/octet-stream": [".pdf"],
       "application/vnd.pdf": [".pdf"]
-    },
+    }
   }],
   "protocol_handlers": [{
     "protocol": "web+tmsom",

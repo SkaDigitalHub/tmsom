@@ -169,4 +169,29 @@ function setupAlarm() {
 }
 
 // Run when app loads
+function setupAlarm() {
+  // TEST: Set alarm for 2 minutes from now (for debugging)
+  const now = new Date();
+  const testTime = new Date(now.getTime() + 120000); // 2 minutes later
+  
+  console.log("TEST ALARM WILL TRIGGER AT:", testTime.toLocaleString());
+
+  Notification.requestPermission().then(perm => {
+    if (perm === "granted") {
+      const checkAlarm = setInterval(() => {
+        if (new Date() >= testTime) {
+          new Notification("TMSOM TEST", {
+            body: "Alarm is working!",
+            icon: "/tmsom/logo/main.png",
+            vibrate: [200, 100, 200]
+          });
+          clearInterval(checkAlarm);
+          console.log("TEST ALARM FIRED");
+        }
+      }, 1000); // Check every second
+    }
+  });
+}
+
+// Run this in your console to test:
 setupAlarm();

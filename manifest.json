@@ -4,7 +4,7 @@
   "name": "TMSOM App",
   "display": "standalone",
   "start_url": "/",
-  "short_name": "tmsom",
+  "short_name": "TMSOM",
   "theme_color": "#8A1878",
   "description": "Comprehensive platform for TMSOM education access",
   "orientation": "any",
@@ -44,6 +44,12 @@
       "src": "assets/img/screen1.png",
       "sizes": "1617x1012",
       "type": "image/png"
+    },
+    {
+      "src": "assets/img/screen2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "features": [
@@ -72,5 +78,26 @@
   "author": {
     "name": "SkaDigital Hub",
     "website": "https://skadigitalhub.github.io/SkaApps"
-  }
+  },
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "file_handlers": [{
+    "action": "/pdf-viewer",
+    "accept": {
+      "application/pdf": [".pdf"],
+      "application/octet-stream": [".pdf"],
+      "application/vnd.pdf": [".pdf"]
+    },
+  }],
+  "protocol_handlers": [{
+    "protocol": "web+tmsom",
+    "url": "/tmsom/?url=%s"
+  }]
 }

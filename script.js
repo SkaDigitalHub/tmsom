@@ -213,7 +213,7 @@ function triggerAlarm() {
   notification.onclick = (event) => {
     event.preventDefault();
     if (event.action === "join") {
-      window.location.href = "/tmsom/login";
+      window.location.href = "/tmsom/login.html";
     } else if (event.action === "snooze") {
       setTimeout(triggerAlarm, 10 * 60 * 1000); // Snooze for 10 mins
     }

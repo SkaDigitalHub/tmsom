@@ -65,9 +65,8 @@ self.addEventListener('fetch', (event) => {
   // HTML requests (Network first, with offline fallback)
   if (request.headers.get('accept').includes('text/html')) {
     event.respondWith(
-      fetch(request)
-        .then(networkResponse => networkResponse)
-        .catch(() => caches.match(OFFLINE_URL))
+      fetch(request)  // Try network first
+        .catch(() => caches.match('/offline.html'))  // Fallback to offline page
     );
     return;
   }

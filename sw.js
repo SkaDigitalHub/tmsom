@@ -121,5 +121,16 @@ self.addEventListener('notificationclick', event => {
   );
 });
 
-
+self.addEventListener('notificationclick', (event) => {
+  if (event.action === 'snooze') {
+    event.waitUntil(
+      self.registration.showNotification("Reminder Set", {
+        body: "I'll remind you again in 10 minutes",
+        vibrate: [200],
+        icon: 'logo/main.png'
+      })
+    );
+    // Implement 10-minute delay logic here
+  }
+});
 

@@ -1,11 +1,13 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "TMSOM App",
   "short_name": "TMSOM",
-  "start_url": "/tmsom/index.html?utm_source=pwa",
-  "scope": "/tmsom/",
+  "start_url": "/index.html?utm_source=pwa",
+  "scope": "https://skadigitalhub.github.io/tmsom/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "minimal-ui"],
+  "display_override": ["window-controls-overlay",
+  "standalone",
+  "browser",
+  "minimal-ui"],
   "background_color": "#008000", 
   "theme_color": "#8A1878",
   "description": "Comprehensive platform for TMSOM education access",
@@ -14,9 +16,9 @@
     "name": "SkaDigital Hub",
     "website": "https://skadigitalhub.github.io/SkaApps"
   },
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "dir": "ltr",
-  "lang": "en-US",
+  "lang": "en",
   "prefer_related_applications": false,
   "screenshots": [
     {
@@ -65,12 +67,12 @@
     {
       "name": "Log in",
       "short_name": "Login",
-      "url": "/tmsom/login",
+      "url": "/login",
       "description": "Start a new session"
     }
   ],
   "share_target": {
-    "action": "/tmsom/share",
+    "action": "/share",
     "method": "GET",
     "params": {
       "title": "title",
@@ -79,7 +81,7 @@
     }
   },
   "file_handlers": [{
-    "action": "/tmsom/pdf-viewer",
+    "action": "/pdf-viewer",
     "accept": {
       "application/pdf": [".pdf"],
       "application/octet-stream": [".pdf"],  // Fallback for Linux/Windows

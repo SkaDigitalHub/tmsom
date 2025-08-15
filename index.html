@@ -40,15 +40,41 @@
 </div>
     
     <script>
-// Register Service Worker
+// Register Service Worker with enhanced error handling
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/tmsom/sw.js', { 
       scope: '/tmsom/' 
     })
-    .then(reg => console.log('SW registered:', reg))
-    .catch(err => console.log('SW registration failed:', err));
+    .then(reg => {
+      console.log('[SW] Registration successful. Scope:', reg.scope);
+      
+      // Optional: Check for updates on page load
+      reg.update().then(() => {
+        if (reg.installing) {
+          console.log('[SW] Update found and installing...');
+          reg.installing.addEventListener('statechange', () => {
+            if (reg.installing.state === 'activated') {
+              console.log('[SW] New version activated!');
+              // Notify user or reload (optional)
+              window.location.reload();
+            }
+          });
+        }
+      });
+    })
+    .catch(err => {
+      console.error('[SW] Registration failed:', err);
+      // Fallback: Show a warning to the user (optional)
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        '<div class="sw-error">Offline features disabled. Check network.</div>'
+      );
+    });
   });
+} else {
+  console.warn('[SW] Service Worker not supported in this browser.');
+  // Fallback for non-SW browsers (e.g., display a message)
 }
 </script>
 

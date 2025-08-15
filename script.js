@@ -75,7 +75,7 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const reg = await navigator.serviceWorker.register('/sw.js');
+      const reg = await navigator.serviceWorker.register('/tmsom/sw.js');
       console.log('SW registered:', reg);
       
       // Check for updates hourly

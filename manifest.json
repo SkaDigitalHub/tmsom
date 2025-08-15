@@ -99,5 +99,9 @@
   "protocol_handlers": [{
     "protocol": "web+tmsom",
     "url": "/tmsom/?url=%s"
-  }]
+  }],
+  "edge_side_panel": {
+  "preferred_width": 340
+},
+"handle_links": "preferred"
 }

@@ -26,6 +26,18 @@
 
     <!-- Dark Mode Toggle Button -->
   <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+
+
+<!-- Notification Toast -->
+<div id="sync-toast" style="...">
+  <span id="sync-message"></span>
+  <button onclick="location.reload()">Refresh</button>
+</div>
+
+<!-- Offline Indicator -->
+<div id="offline-bar" style="display:none; background:red; color:white;">
+  Offline - Changes will sync when connected
+</div>
     
     <script>
 // Register Service Worker

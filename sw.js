@@ -8,7 +8,9 @@ const OFFLINE_URL = '/tmsom/offline.html';  // Relative to SW location
 const PRECACHE_ASSETS = [
   '/tmsom/',
   '/tmsom/index.html',
-  '/tmsom/offline.html',  // Critical offline fallback
+  '/tmsom/offline.html', // Critical offline fallback
+  '/tmsom/overview.html',
+  '/tmsom/agent.html',
   '/tmsom/logo/main.png',
   '/tmsom/css/main.css',
   '/tmsom/styles.css',
@@ -106,10 +108,12 @@ self.addEventListener('message', (event) => {
 // ===== AUTO-SYNC FOR ALL FEATURES =====
 const FEATURE_CACHE = 'tmsom-features-v1';
 const SYNC_FEATURES = [
-  '/tmsom/overview',
-  '/tmsom/classroom',
-  '/tmsom/library',
-  '/tmsom/activity'
+  '/tmsom/index.html',
+  '/tmsom/overview.html',
+  '/tmsom/agent.html',
+  '/tmsom/enter.html',
+  '/tmsom/library.html',
+  '/tmsom/activity.html'
 ];
 
 // Background sync handler

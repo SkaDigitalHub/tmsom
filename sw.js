@@ -10,7 +10,6 @@ const PRECACHE_ASSETS = [
   './index.html',
   './offline.html',  // Critical offline fallback
   './logo/main.png',
-  './logo/main.png',
   './css/main.css',
   './styles.css',
   './script.js',

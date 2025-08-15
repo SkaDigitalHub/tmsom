@@ -6,7 +6,7 @@
   "scope": "/tmsom/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
-  "background_color": "#008000", // Changed from green to HEX
+  "background_color": "#008000", 
   "theme_color": "#8A1878",
   "description": "Comprehensive platform for TMSOM education access",
   "categories": ["education", "productivity"],
@@ -56,7 +56,7 @@
     {
       "name": "TMSOM AI Agent",
       "short_name": "AI Agent",
-      "url": "/tmsom/agent",
+      "url": "/agent",
       "icons": [{
         "src": "img/agent.avatar.png",
         "sizes": "96x96"

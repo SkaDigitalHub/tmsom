@@ -23,6 +23,25 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    #retry-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+#cached-pages {
+  list-style: none;
+  padding: 0;
+}
+
+#cached-pages a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+#cached-pages a:hover {
+  text-decoration: underline;
+}
   </style>
 </head>
 <body>
@@ -39,31 +58,81 @@
   </div>
 
   <script>
-    // Show cached routes
-    caches.open('TMSOM-App-v2').then(cache => {
-      cache.keys().then(requests => {
-        const pagesList = document.getElementById('cached-pages');
-        requests.forEach(request => {
-          if (request.url.endsWith('.html') && !request.url.includes('offline.html')) {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = request.url;
-            a.textContent = new URL(request.url).pathname.split('/').pop();
-            li.appendChild(a);
-            pagesList.appendChild(li);
-          }
-        });
-      });
-    });
+  // Show cached routes with error handling
+  function displayCachedPages() {
+    const pagesList = document.getElementById('cached-pages');
+    
+    // Show loading state
+    pagesList.innerHTML = '<li>Loading cached pages...</li>';
 
-    // Retry logic
-    document.getElementById('retry-button').addEventListener('click', () => {
-      if (navigator.onLine) {
+    caches.open('TMSOM-App-v2')
+      .then(cache => cache.keys())
+      .then(requests => {
+        // Clear loading state
+        pagesList.innerHTML = '';
+
+        const htmlPages = requests.filter(request => 
+          request.url.endsWith('.html') && 
+          !request.url.includes('offline.html')
+        );
+
+        if (htmlPages.length === 0) {
+          pagesList.innerHTML = '<li>No cached pages available</li>';
+          return;
+        }
+
+        htmlPages.forEach(request => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = request.url;
+          a.textContent = new URL(request.url).pathname.split('/').pop() || 'Home';
+          a.onclick = (e) => {
+            e.preventDefault();
+            // Check connectivity before navigating
+            if (navigator.onLine) {
+              window.location.href = request.url;
+            } else {
+              caches.match(request.url)
+                .then(response => {
+                  if (response) {
+                    window.location.href = request.url; // Will work offline
+                  } else {
+                    alert('This page is not available offline.');
+                  }
+                });
+            }
+          };
+          li.appendChild(a);
+          pagesList.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to load cached pages:', err);
+        pagesList.innerHTML = '<li>Error loading offline content</li>';
+      });
+  }
+
+  // Retry logic with enhanced UX
+  document.getElementById('retry-button').addEventListener('click', () => {
+    const retryBtn = document.getElementById('retry-button');
+    retryBtn.textContent = 'Checking connection...';
+    retryBtn.disabled = true;
+
+    // More reliable online check than navigator.onLine
+    fetch(window.location.origin, { method: 'HEAD', cache: 'no-store' })
+      .then(() => {
         window.location.reload();
-      } else {
+      })
+      .catch(() => {
         alert('Still offline. Please check your connection.');
-      }
-    });
-  </script>
+        retryBtn.textContent = 'Retry';
+        retryBtn.disabled = false;
+      });
+  });
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', displayCachedPages);
+</script>
+  
 </body>
 </html>

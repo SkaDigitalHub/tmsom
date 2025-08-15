@@ -1,7 +1,3 @@
-importScripts(
-    'https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox-sw.js'
-);
-
 // ===== TMSOM Service Worker =====
 // Version: v2.1 (Updated caching strategy)
 const CACHE_NAME = 'TMSOM-App-v2';  // Updated version forces cache refresh

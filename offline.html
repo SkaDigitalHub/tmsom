@@ -40,7 +40,7 @@
 
   <script>
     // Show cached routes
-    caches.open('tmsom-cache-v1').then(cache => {
+    caches.open('TMSOM-App-v2').then(cache => {
       cache.keys().then(requests => {
         const pagesList = document.getElementById('cached-pages');
         requests.forEach(request => {

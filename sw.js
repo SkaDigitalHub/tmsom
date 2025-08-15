@@ -140,21 +140,20 @@ async function updateFeatures() {
   showToast("New content available!");
 }
 
-
-// 1. Handle incoming notifications
-self.addEventListener('push', event => {
-  const data = event.data.json();
-  self.registration.showNotification(data.title, {
-    body: data.message,
-    icon: 'logo/main.png',
-    vibrate: [200, 100, 200] // Vibration pattern
-  });
-});
-
-// 2. Handle notification clicks
-self.addEventListener('notificationclick', event => {
+// Alarm Notification
+// 4. Service Worker Support (for reliability)
+// Add to sw.js:
+self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow('/tmsom/overview')
-  );
+  if (event.action === 'join') {
+    clients.openWindow('/tmsom/enter');
+  } else if (event.action === 'snooze') {
+    event.waitUntil(
+      self.registration.showNotification("Reminder Set", {
+        body: "I'll remind you again in 10 minutes",
+        vibrate: [200, 100, 200, 100, 200],
+        icon: '/tmsom/logo/main.png'
+      })
+    );
+  }
 });

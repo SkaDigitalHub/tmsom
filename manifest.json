@@ -1,95 +1,86 @@
 {
-  "name": "TMSOM App",
-  "short_name": "TMSOM",
-  "start_url": "/index.html?utm_source=pwa",
-  "scope": "https://skadigitalhub.github.io/tmsom/",
+  "id": "/",
+  "scope": "/",
+  "name": "PWA Starter",
   "display": "standalone",
-  "display_override": ["window-controls-overlay",
-  "standalone",
-  "browser",
-  "minimal-ui"],
-  "background_color": "#008000", 
-  "theme_color": "#8A1878",
-  "description": "Comprehensive platform for TMSOM education access",
-  "categories": ["education", "productivity"],
-  "author": {
-    "name": "SkaDigital Hub",
-    "website": "https://skadigitalhub.github.io/SkaApps"
-  },
-  "orientation": "portrait",
-  "dir": "ltr",
-  "lang": "en",
+  "start_url": "/",
+  "short_name": "starter",
+  "theme_color": "#E1477E",
+  "description": "This is a PWA Starter app",
+  "orientation": "any",
+  "background_color": "#E1477E",
+  "related_applications": [],
   "prefer_related_applications": false,
-  "screenshots": [
-    {
-      "src": "assets/img/screen1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Dashboard View"
-    },
-    {
-      "src": "assets/img/screen2.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
+  "display_override": ["window-controls-overlay"],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
   "icons": [
     {
-      "src": "img/logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "img/logo.png",
+      "src": "assets/icons/512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "img/logo.png",
-      "sizes": "144x144",
+      "src": "assets/icons/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/24x24.png",
+      "sizes": "24x24",
       "type": "image/png"
     }
   ],
-  "shortcuts": [
+  "screenshots": [
     {
-      "name": "TMSOM AI Agent",
-      "short_name": "AI Agent",
-      "url": "/agent",
-      "icons": [{
-        "src": "img/agent.avatar.png",
-        "sizes": "96x96"
-      }]
-    },
-    {
-      "name": "Log in",
-      "short_name": "Login",
-      "url": "/login",
-      "description": "Start a new session"
+      "src": "assets/screenshots/screen.png",
+      "sizes": "1617x1012",
+      "type": "image/png"
     }
   ],
-  "share_target": {
-    "action": "/share",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
+  "features": [
+    "Cross Platform",
+    "fast",
+    "simple"
+  ],
+  "categories": [
+    "social"
+  ],
+  "shortcuts": [
+    {
+      "name": "Open About",
+      "short_name": "About",
+      "description": "Open the about page",
+      "url": "/about",
+      "icons": [{ "src": "assets/icons/192x192.png", "sizes": "192x192" }]
     }
-  },
-  "file_handlers": [{
-    "action": "/pdf-viewer",
-    "accept": {
-      "application/pdf": [".pdf"],
-      "application/octet-stream": [".pdf"],  // Fallback for Linux/Windows
-      "application/vnd.pdf": [".pdf"]       // For ChromeOS and Android
-    },
-  }],
-  "protocol_handlers": [{
-    "protocol": "web+tmsom",
-    "url": "/tmsom/?url=%s"
-  }]
+  ],
+  "widgets": [
+    {
+      "name": "Starter Widget",
+      "tag": "starterWidget",
+      "ms_ac_template": "widget/ac.json",
+      "data": "widget/data.json",
+      "description": "A simple widget example from pwa-starter.",
+      "screenshots": [
+        {
+          "src": "assets/screenshots/widget-screen.png",
+          "sizes": "500x500",
+          "label": "Widget screenshot"
+        }
+      ],
+      "icons": [
+        {
+          "src": "assets/icons/48x48.png",
+          "sizes": "48x48"
+        }
+      ]
+    }
+  ]
 }

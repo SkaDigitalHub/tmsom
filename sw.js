@@ -1,14 +1,14 @@
 // ===== TMSOM Service Worker =====
-// Version: v2.1 (Updated caching strategy)
-const CACHE_NAME = 'TMSOM-App-v2';  // Updated version forces cache refresh
+// Version: v2.2 (Optimized caching & sync)
+const CACHE_NAME = 'TMSOM-App-v2';
 const RUNTIME_CACHE = 'TMSOM-Runtime';
-const OFFLINE_URL = '/tmsom/offline.html';  // Relative to SW location
+const OFFLINE_URL = '/tmsom/offline.html';  // Must match actual path
 
-// Core assets to cache immediately on install
+// Core assets to cache on install
 const PRECACHE_ASSETS = [
   '/tmsom/',
   '/tmsom/index.html',
-  '/tmsom/offline.html', // Critical offline fallback
+  OFFLINE_URL,
   '/tmsom/overview.html',
   '/tmsom/agent.html',
   '/tmsom/logo/main.png',
@@ -26,10 +26,16 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('[SW] Caching core assets');
-        return cache.addAll(PRECACHE_ASSETS);
+        // Cache each asset individually to avoid failing entire install
+        return Promise.all(
+          PRECACHE_ASSETS.map(url => 
+            cache.add(url).catch(err => 
+              console.warn('[SW] Failed to cache:', url, err)
+            )
+          )
+        );
       })
-      .then(() => self.skipWaiting())  // Activate immediately
-      .catch(err => console.error('[SW] Install failed:', err))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -38,17 +44,16 @@ self.addEventListener('activate', (event) => {
   console.log('[SW] Activated');
   
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME && cache !== RUNTIME_CACHE) {
-            console.log('[SW] Removing old cache:', cache);
-            return caches.delete(cache);
-          }
-        })
-      );
-    })
-    .then(() => self.clients.claim())  // Control all open pages
+    caches.keys().then(cacheNames => 
+      Promise.all(
+        cacheNames.map(cache => 
+          (cache !== CACHE_NAME && cache !== RUNTIME_CACHE) 
+            ? caches.delete(cache) 
+            : null
+        )
+      )
+    )
+    .then(() => self.clients.claim())
   );
 });
 
@@ -57,78 +62,81 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests and cross-origin requests
+  // Skip non-GET or cross-origin requests
   if (request.method !== 'GET' || !url.origin.startsWith(self.location.origin)) {
     return;
   }
 
-  // HTML requests (Network first, with offline fallback)
+  // HTML: Network-first, offline fallback
   if (request.headers.get('accept').includes('text/html')) {
     event.respondWith(
-      fetch(request)  // Try network first
-        .catch(() => caches.match('/offline.html'))  // Fallback to offline page
+      fetch(request)
+        .then(response => {
+          // Cache the visited page for future offline use
+          const clonedResponse = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, clonedResponse));
+          return response;
+        })
+        .catch(() => 
+          caches.match(request).then(cached => 
+            cached || caches.match(OFFLINE_URL)
+          )
+        )
     );
     return;
   }
 
-  // API requests (Network first, cache fallback)
+  // API: Network-first, cache fallback
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
-        .then(networkResponse => {
-          // Cache successful API responses
-          const clonedResponse = networkResponse.clone();
+        .then(response => {
+          // Cache API responses for offline use
+          const clonedResponse = response.clone();
           caches.open(RUNTIME_CACHE)
             .then(cache => cache.put(request, clonedResponse));
-          return networkResponse;
+          return response;
         })
         .catch(() => caches.match(request))
     );
     return;
   }
 
-  // Static assets (Cache first, network fallback)
+  // Static assets: Cache-first
   event.respondWith(
-    caches.match(request)
-      .then(cachedResponse => cachedResponse || fetch(request))
+    caches.match(request).then(cached => 
+      cached || fetch(request)
+    )
   );
 });
 
-// ===== OFFLINE DETECTION =====
-self.addEventListener('message', (event) => {
-  if (event.data.type === 'CHECK_ONLINE_STATUS') {
-    fetch('./is-online.txt', { method: 'HEAD', cache: 'no-store' })
-      .then(() => event.source.postMessage({ isOnline: true }))
-      .catch(() => event.source.postMessage({ isOnline: false }));
-  }
-});
-
-
-// ===== AUTO-SYNC FOR ALL FEATURES =====
+// ===== BACKGROUND SYNC =====
 const FEATURE_CACHE = 'tmsom-features-v1';
 const SYNC_FEATURES = [
   '/tmsom/index.html',
   '/tmsom/overview.html',
-  '/tmsom/agent.html',
-  '/tmsom/enter.html',
-  '/tmsom/library.html',
-  '/tmsom/activity.html'
+  '/tmsom/agent.html'
 ];
 
-// Background sync handler
 self.addEventListener('sync', event => {
   if (event.tag === 'sync-features') {
     event.waitUntil(
-      caches.open(FEATURE_CACHE).then(cache => 
-        Promise.all(SYNC_FEATURES.map(url => 
-          fetch(url).then(res => cache.put(url, res))
-        ))
-      )
+      caches.open(FEATURE_CACHE)
+        .then(cache => 
+          Promise.all(
+            SYNC_FEATURES.map(url => 
+              fetch(url)
+                .then(res => cache.put(url, res))
+                .catch(err => console.warn('[SW] Sync failed for:', url, err))
+          )
+        )
+        .then(() => notifyClients('Features updated!'))
     );
   }
 });
 
-// Periodic updates (daily)
+// ===== PERIODIC SYNC (Requires Periodic Background Sync API) =====
 self.addEventListener('periodicsync', event => {
   if (event.tag === 'daily-update') {
     event.waitUntil(updateFeatures());
@@ -137,15 +145,27 @@ self.addEventListener('periodicsync', event => {
 
 async function updateFeatures() {
   const cache = await caches.open(FEATURE_CACHE);
-  await Promise.all(SYNC_FEATURES.map(url => {
-    return fetch(url).then(res => cache.put(url, res));
-  }));
-  showToast("New content available!");
+  await Promise.all(
+    SYNC_FEATURES.map(url => 
+      fetch(url)
+        .then(res => cache.put(url, res))
+        .catch(err => console.warn('[SW] Update failed:', url, err))
+    )
+  );
+  await notifyClients("New content available!");
 }
 
-// Alarm Notification
-// 4. Service Worker Support (for reliability)
-// Add to sw.js:
+// Notify all open clients
+function notifyClients(message) {
+  return self.clients.matchAll()
+    .then(clients => 
+      clients.forEach(client => 
+        client.postMessage({ type: 'toast', message })
+      )
+    );
+}
+
+// ===== NOTIFICATION HANDLING =====
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   if (event.action === 'join') {
@@ -154,7 +174,6 @@ self.addEventListener('notificationclick', (event) => {
     event.waitUntil(
       self.registration.showNotification("Reminder Set", {
         body: "I'll remind you again in 10 minutes",
-        vibrate: [200, 100, 200, 100, 200],
         icon: '/tmsom/logo/main.png'
       })
     );

@@ -132,66 +132,64 @@ if ('serviceWorker' in navigator) {
         });
 
 
-// Alarm Check permission first
-function setupAlarm() {
-  // Calculate time until next Sunday 7:00 PM GMT+0
+// ===== TMSOM ALARM SYSTEM =====
+// Production-ready with debug mode
+
+// Main alarm function (for production)
+function setupSundayAlarm() {
+  // 1. Calculate next Sunday 7:00 PM GMT
   const now = new Date();
   const nextSunday = new Date();
   
-  // Set to next Sunday (0 = Sunday)
-  nextSunday.setDate(now.getDate() + (7 - now.getDay()) % 7);
- nextSunday.setHours(19, 0, 0, 0); // 7:00 PM GMT+0
+  nextSunday.setDate(now.getDate() + (7 - now.getDay()));
+  nextSunday.setHours(19, 0, 0, 0); // 7PM GMT
 
-  // If it's already past this Sunday, set for next week
-  if (nextSunday < now) {
-    nextSunday.setDate(nextSunday.getDate() + 7);
-  }
+  // If already past, schedule for next week
+  if (nextSunday < now) nextSunday.setDate(nextSunday.getDate() + 7);
 
-  // Show permission request
+  console.log("Next lecture reminder:", nextSunday.toUTCString());
+
+  // 2. Set up the alarm
   Notification.requestPermission().then(perm => {
     if (perm === "granted") {
-      // Create repeating alarm
       setInterval(() => {
-        new Notification("TMSOM Reminder", {
-          body: "Your lecture starts now!",
-          icon: "logo/main.png",
-          vibrate: [200, 100, 200]
-        });
-      }, 7 * 24 * 60 * 60 * 1000); // Repeat every 7 days
-
-      // Trigger first notification immediately for testing
-      new Notification("TMSOM Reminder Set", {
-        body: `You'll get reminders every Sunday at 7:00 PM GMT+0`,
-        icon: "logo/main.png"
-      });
+        if (new Date() >= nextSunday) {
+          new Notification("TMSOM Lecture Reminder", {
+            body: "Your weekly lecture starts now!",
+            icon: "logo/main.png", // Fixed absolute path
+            vibrate: [200, 100, 200]
+          });
+          nextSunday.setDate(nextSunday.getDate() + 7); // Schedule next week
+        }
+      }, 60000); // Check every minute
     }
   });
 }
 
-// Run when app loads
-function setupAlarm() {
-  // TEST: Set alarm for 2 minutes from now (for debugging)
-  const now = new Date();
-  const testTime = new Date(now.getTime() + 120000); // 2 minutes later
-  
-  console.log("TEST ALARM WILL TRIGGER AT:", testTime.toLocaleString());
+// Debug/test function (2-minute trigger)
+function testAlarm() {
+  const testTime = new Date(Date.now() + 120000); // 2 minutes from now
+  console.log("[TEST] Alarm will trigger at:", testTime.toLocaleString());
 
   Notification.requestPermission().then(perm => {
     if (perm === "granted") {
-      const checkAlarm = setInterval(() => {
+      const testInterval = setInterval(() => {
         if (new Date() >= testTime) {
           new Notification("TMSOM TEST", {
-            body: "Alarm is working!",
-            icon: "/tmsom/logo/main.png",
-            vibrate: [200, 100, 200]
+            body: "Debug alarm is working!",
+            icon: "logo/main.png",
+            vibrate: [200, 100, 200, 100, 200, 100, 200, 100, 200]
           });
-          clearInterval(checkAlarm);
-          console.log("TEST ALARM FIRED");
+          clearInterval(testInterval);
+          console.log("[TEST] Alarm fired successfully");
         }
       }, 1000); // Check every second
     }
   });
 }
 
-// Run this in your console to test:
-setupAlarm();
+// Auto-start production alarm on load
+window.addEventListener('load', setupSundayAlarm);
+
+// Make test function available in console
+window.testAlarm = testAlarm;

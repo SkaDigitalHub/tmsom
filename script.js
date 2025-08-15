@@ -140,7 +140,9 @@ function setupAlarm() {
   
   // Set to next Sunday (0 = Sunday)
   nextSunday.setDate(now.getDate() + (7 - now.getDay()) % 7);
-  nextSunday.setHours(19, 0, 0, 0); // 7:00 PM GMT+0
+        
+  const now = new Date();
+nextSunday.setHours(now.getHours(), now.getMinutes() + 5, 0, 0);
 
   // If it's already past this Sunday, set for next week
   if (nextSunday < now) {

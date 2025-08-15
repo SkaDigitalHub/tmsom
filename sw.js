@@ -2,18 +2,18 @@
 // Version: v2.1 (Updated caching strategy)
 const CACHE_NAME = 'TMSOM-App-v2';  // Updated version forces cache refresh
 const RUNTIME_CACHE = 'TMSOM-Runtime';
-const OFFLINE_URL = './offline.html';  // Relative to SW location
+const OFFLINE_URL = '/tmsom/offline.html';  // Relative to SW location
 
 // Core assets to cache immediately on install
 const PRECACHE_ASSETS = [
-  './',
-  './index.html',
-  './offline.html',  // Critical offline fallback
-  './logo/main.png',
-  './css/main.css',
-  './styles.css',
-  './script.js',
-  './manifest.json'
+  '/tmsom/',
+  '/tmsom/index.html',
+  '/tmsom/offline.html',  // Critical offline fallback
+  '/tmsom/logo/main.png',
+  '/tmsom/css/main.css',
+  '/tmsom/styles.css',
+  '/tmsom/script.js',
+  '/tmsom/manifest.json'
 ];
 
 // ===== INSTALL =====
@@ -103,6 +103,44 @@ self.addEventListener('message', (event) => {
 });
 
 
+// ===== AUTO-SYNC FOR ALL FEATURES =====
+const FEATURE_CACHE = 'tmsom-features-v1';
+const SYNC_FEATURES = [
+  '/tmsom/overview',
+  '/tmsom/classroom',
+  '/tmsom/library',
+  '/tmsom/activity'
+];
+
+// Background sync handler
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-features') {
+    event.waitUntil(
+      caches.open(FEATURE_CACHE).then(cache => 
+        Promise.all(SYNC_FEATURES.map(url => 
+          fetch(url).then(res => cache.put(url, res))
+        ))
+      )
+    );
+  }
+});
+
+// Periodic updates (daily)
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'daily-update') {
+    event.waitUntil(updateFeatures());
+  }
+});
+
+async function updateFeatures() {
+  const cache = await caches.open(FEATURE_CACHE);
+  await Promise.all(SYNC_FEATURES.map(url => {
+    return fetch(url).then(res => cache.put(url, res));
+  }));
+  showToast("New content available!");
+}
+
+
 // 1. Handle incoming notifications
 self.addEventListener('push', event => {
   const data = event.data.json();
@@ -117,6 +155,6 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
-    clients.openWindow('/overview')
+    clients.openWindow('/tmsom/overview')
   );
 });

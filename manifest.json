@@ -61,6 +61,16 @@
       "description": "Open the AI Agent page",
       "url": "/agent",
       "icons": [{ "src": "logo/agent.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Log in",
+      "short_name": "Login",
+      "url": "/login",
+      "description": "Start a new session"
     }
-  ]
+  ],
+  "author": {
+    "name": "SkaDigital Hub",
+    "website": "https://skadigitalhub.github.io/SkaApps"
+  }
 }

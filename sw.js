@@ -12,7 +12,7 @@ const PRECACHE_ASSETS = [
   './logo/main.png',
   './logo/main.png',
   './css/main.css',
-  '.styles.css',
+  './styles.css',
   './script.js',
   './manifest.json'
 ];

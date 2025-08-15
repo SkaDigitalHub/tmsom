@@ -91,9 +91,9 @@
   "file_handlers": [{
     "action": "/tmsom/pdf-viewer",
     "accept": {
-      "application/pdf": [".pdf"],
-      "application/octet-stream": [".pdf"],
-      "application/vnd.pdf": [".pdf"]
+  "application/pdf": [".pdf"],
+  "text/plain": [".txt"],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"]
     }
   }],
   "protocol_handlers": [{

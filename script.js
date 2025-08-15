@@ -132,6 +132,37 @@ if ('serviceWorker' in navigator) {
         });
 
 
+
+// Register sync for all features
+function registerSync() {
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    navigator.serviceWorker.ready.then(reg => {
+      // For form submissions/chat
+      document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          if (!navigator.onLine) {
+            e.preventDefault();
+            await reg.sync.register('sync-features');
+            showToast("Data will sync when online!");
+          }
+        });
+      });
+
+      // Daily content updates
+      reg.periodicSync.register('daily-update', {
+        minInterval: 24 * 60 * 60 * 1000 // 24 hours
+      });
+    });
+  }
+}
+
+// Call on login
+if (location.pathname.includes('login')) {
+  registerSync();
+}
+
+
+
 // ===== TMSOM ALARM SYSTEM =====
 // Production-ready with debug mode
 

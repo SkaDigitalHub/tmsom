@@ -155,6 +155,21 @@
             transform: scale(1.1);
         }
 
+/* Toast-sync */
+#sync-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #8A1878;
+  color: white;
+  padding: 12px;
+  border-radius: 4px;
+  display: none;
+  z-index: 1000;
+}
+
+
+
         @media (max-width: 768px) {
             .school-name {
                 font-size: 2rem;

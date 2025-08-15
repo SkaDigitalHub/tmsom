@@ -123,41 +123,4 @@ self.addEventListener('notificationclick', event => {
 });
 
 
-// Alarm Check permission first
-function setupAlarm() {
-  // Calculate time until next Sunday 7:00 PM GMT+0
-  const now = new Date();
-  const nextSunday = new Date();
-  
-  // Set to next Sunday (0 = Sunday)
-  nextSunday.setDate(now.getDate() + (7 - now.getDay()) % 7);
-  nextSunday.setHours(19, 0, 0, 0); // 7:00 PM GMT+0
 
-  // If it's already past this Sunday, set for next week
-  if (nextSunday < now) {
-    nextSunday.setDate(nextSunday.getDate() + 7);
-  }
-
-  // Show permission request
-  Notification.requestPermission().then(perm => {
-    if (perm === "granted") {
-      // Create repeating alarm
-      setInterval(() => {
-        new Notification("TMSOM Reminder", {
-          body: "Your lecture starts now!",
-          icon: "logo/main.png",
-          vibrate: [200, 100, 200]
-        });
-      }, 7 * 24 * 60 * 60 * 1000); // Repeat every 7 days
-
-      // Trigger first notification immediately for testing
-      new Notification("TMSOM Reminder Set", {
-        body: `You'll get reminders every Sunday at 7:00 PM GMT+0`,
-        icon: "logo/main.png"
-      });
-    }
-  });
-}
-
-// Run when app loads
-setupAlarm();

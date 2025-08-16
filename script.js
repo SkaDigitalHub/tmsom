@@ -171,6 +171,32 @@ if (location.pathname.includes('/login.html')) {
 }
 
 
+// Request permission and show a test notification
+function enableNotifications() {
+  if (!('Notification' in window)) {
+    alert('Notifications not supported in your browser.');
+    return;
+  }
+
+  Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      // Show immediate test notification
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification('TMSOM Ready', {
+            body: 'You’ll receive important updates here.',
+            icon: '/tmsom/logo/main.png'
+          });
+        });
+      }
+    }
+  });
+}
+
+// Add a button to trigger notifications (in your HTML)
+document.getElementById('enable-notifications').addEventListener('click', enableNotifications);
+
+
 
 // ===== TMSOM LECTURE ALARM SYSTEM =====
 // Production-ready with snooze and "Join Now" action

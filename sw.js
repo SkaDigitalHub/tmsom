@@ -143,6 +143,36 @@ async function updateFeatures() {
   showToast("New content available!");
 }
 
+
+// ===== PUSH NOTIFICATION (No Backend) =====
+self.addEventListener('push', (event) => {
+  // Use hardcoded notification (no server-side triggering)
+  const title = 'TMSOM Reminder';
+  const options = {
+    body: 'You are reminded to join lectures every Sunday at 7:00 PM!',
+    icon: '/tmsom/logo/main.png',
+    badge: '/tmsom/logo/main.png',
+    vibrate: [200, 100, 200, 100, 200, 100, 200],
+    data: { url: '/tmsom/' }
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Handle notification clicks (same as before)
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window' })
+      .then(clientList => {
+        const client = clientList.find(c => c.url === event.notification.data.url);
+        if (client) return client.focus();
+        return clients.openWindow(event.notification.data.url);
+      })
+  );
+});
+
+
 // Alarm Notification
 // 4. Service Worker Support (for reliability)
 // Add to sw.js:

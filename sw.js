@@ -132,7 +132,7 @@ self.addEventListener('sync', event => {
           )
         )
         .then(() => notifyClients('Features updated!'))
-    );
+    )
   }
 });
 

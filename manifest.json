@@ -9,7 +9,7 @@
   "description": "Comprehensive platform for TMSOM education access",
   "orientation": "any",
   "background_color": "#008000",
-  "related_applications": [],
+  "related_applications": "https://skadigitalhub.github.io/SkaApps",
   "dir": "ltr",
   "lang": "en",
   "prefer_related_applications": false,

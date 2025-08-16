@@ -67,7 +67,7 @@
       "short_name": "Agent",
       "description": "Open the AI Agent page",
       "url": "/tmsom/agent",
-      "icons": [{ "src": "/tmsom/logo/agent.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/tmsom/logo/agent.icon.png", "sizes": "192x192" }]
     },
     {
       "name": "Log in",

@@ -185,7 +185,8 @@ function enableNotifications() {
         navigator.serviceWorker.ready.then(reg => {
           reg.showNotification('TMSOM Ready', {
             body: 'You’ll receive important updates here.',
-            icon: '/tmsom/logo/main.png'
+            icon: '/tmsom/logo/main.png',
+            vibration: [200, 100, 200, 100, 200]
           });
         });
       }

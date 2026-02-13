@@ -191,6 +191,24 @@
         .bar { background: var(--secondary); width: 40px; border-radius: 5px 5px 0 0; transition: height 0.3s ease; }
         .bar-label { font-size: 0.7rem; margin-top: 5px; white-space: nowrap; transform: rotate(-45deg); transform-origin: top left; }
         .bar-value { font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; }
+        
+        .report-summary {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .report-summary p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        @media print {
+            .btn, .modal, .mobile-toggle, .role-selector, nav, .card-header button { display: none; }
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+        }
     </style>
 </head>
 <body>
@@ -305,7 +323,35 @@
             </section>
 
             <section id="reports" class="content-section">
-                <div class="card"><h3>Reports</h3><div id="reportContainer"></div><button class="btn btn-primary" onclick="window.print()">Print</button></div>
+                <div class="card">
+                    <h3>Reports</h3>
+                    <div id="reportContainer">
+                        <div class="report-summary">
+                            <h4>Summary Report</h4>
+                            <p><strong>Total Events:</strong> <span id="report-total-events">0</span></p>
+                            <p><strong>Total Members:</strong> <span id="report-total-members">0</span></p>
+                            <p><strong>Total Attendance:</strong> <span id="report-total-attendance">0</span></p>
+                            <p><strong>Total Income:</strong> $<span id="report-total-income">0</span></p>
+                            <p><strong>Average Attendance per Event:</strong> <span id="report-avg-attendance">0</span></p>
+                        </div>
+                        
+                        <h4>Recent Events</h4>
+                        <div class="table-responsive">
+                            <table id="report-events-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Event</th>
+                                        <th>Attendance</th>
+                                        <th>Income</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-events-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button>
+                </div>
             </section>
         </main>
     </div>
@@ -377,42 +423,75 @@
     <div id="toast">Action completed!</div>
 
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzXuG_1vQ7Cswj8dE8H1LkgQrtrMNJ6IxE5VQ35ltI5TZoXf0KjDFTIdUzOssVoa938/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzXuG_1vQ7Cswj8dE8H1LkgQrtrMNJ6IxE5VQ35ltI5TZoXf0KjDFTIdUzOssVoa938/exec"; // Replace with your deployed web app URL
 
         const StorageService = {
             db: { events: [], attendance: [], finance: [], members: [] },
+            
             async sync(collection) {
-                if(!GAS_URL.includes("macros")) return;
                 try {
-                    const r = await fetch(`${GAS_URL}?collection=${collection}`);
-                    this.db[collection] = await r.json();
+                    const response = await fetch(`${GAS_URL}?collection=${collection}`);
+                    const data = await response.json();
+                    this.db[collection] = data || [];
                 } catch (e) {
-                    console.log("Offline mode - using local data");
+                    console.log(`Error syncing ${collection}:`, e);
+                    // Try to load from localStorage as fallback
+                    const local = localStorage.getItem(`cprn_${collection}`);
+                    this.db[collection] = local ? JSON.parse(local) : [];
                 }
                 UI.renderAll();
             },
+            
             async push(collection, data) {
-                data.id = Date.now().toString();
-                this.db[collection].push(data);
-                if(GAS_URL.includes("macros")) {
-                    try {
-                        await fetch(GAS_URL, {
-                            method: "POST",
-                            mode: "no-cors",
-                            body: JSON.stringify({ collection, data })
-                        });
-                    } catch (e) {
-                        console.log("Offline - saved locally");
-                    }
+                // Generate ID if not present
+                if (!data.id) {
+                    data.id = Date.now().toString();
                 }
+                
+                // Add to local DB
+                this.db[collection].push(data);
+                
+                // Save to localStorage as backup
+                localStorage.setItem(`cprn_${collection}`, JSON.stringify(this.db[collection]));
+                
+                // Send to Google Sheets
+                try {
+                    const response = await fetch(GAS_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            collection: collection, 
+                            data: data 
+                        })
+                    });
+                    this.showToast(`${collection} saved successfully to Google Sheets`);
+                } catch (e) {
+                    console.log("Offline - saved locally only");
+                    this.showToast(`${collection} saved locally (offline mode)`);
+                }
+                
                 UI.renderAll();
-                this.showToast(`${collection} saved successfully`);
             },
+            
             showToast(msg) {
                 const toast = document.getElementById('toast');
                 toast.textContent = msg;
                 toast.style.display = 'block';
                 setTimeout(() => toast.style.display = 'none', 3000);
+            },
+            
+            // Load from localStorage on init
+            loadFromLocalStorage() {
+                ['events', 'attendance', 'finance', 'members'].forEach(collection => {
+                    const local = localStorage.getItem(`cprn_${collection}`);
+                    if (local) {
+                        this.db[collection] = JSON.parse(local);
+                    }
+                });
+                UI.renderAll();
             }
         };
 
@@ -420,8 +499,12 @@
             init() {
                 this.setupNavigation();
                 this.setupEventListeners();
+                // First load from localStorage for instant display
+                StorageService.loadFromLocalStorage();
+                // Then try to sync with Google Sheets
                 ['events', 'attendance', 'finance', 'members'].forEach(c => StorageService.sync(c));
             },
+            
             setupNavigation() {
                 document.querySelectorAll('nav a').forEach(link => {
                     link.onclick = (e) => {
@@ -465,16 +548,17 @@
                     document.getElementById('currentRoleDisplay').textContent = `Role: ${this.options[this.selectedIndex].text}`;
                 };
             },
+            
             setupEventListeners() {
                 document.getElementById('eventForm').onsubmit = (e) => {
                     e.preventDefault();
                     const time = document.getElementById('eventTime').value;
                     const date = document.getElementById('eventDate').value;
                     StorageService.push('events', {
+                        id: Date.now().toString(),
                         name: document.getElementById('eventName').value,
-                        date: date, // This will be YYYY-MM-DD format
-                        time: time,
-                        datetime: time ? `${date} ${time}` : date,
+                        date: date,
+                        time: time, // Store as HH:MM from input
                         category: document.getElementById('eventCategory').value,
                         speaker: document.getElementById('eventSpeaker').value || 'TBD'
                     });
@@ -485,11 +569,11 @@
                 document.getElementById('memberForm').onsubmit = (e) => {
                     e.preventDefault();
                     StorageService.push('members', {
+                        id: Date.now().toString(),
                         name: document.getElementById('memName').value,
                         gender: document.getElementById('memGender').value,
                         phone: document.getElementById('memPhone').value || 'N/A',
-                        dept: document.getElementById('memDept').value || 'General',
-                        status: 'Member'
+                        dept: document.getElementById('memDept').value || 'General'
                     });
                     document.getElementById('memberForm').reset();
                     closeModal('memberModal');
@@ -499,12 +583,13 @@
                     e.preventDefault();
                     const members = parseInt(document.getElementById('attMembers').value) || 0;
                     const visitors = parseInt(document.getElementById('attVisitors').value) || 0;
+                    const total = members + visitors;
                     StorageService.push('attendance', {
+                        id: Date.now().toString(),
                         eventId: document.getElementById('attEventId').value,
                         members: members,
                         visitors: visitors,
-                        total: members + visitors,
-                        date: new Date().toISOString().split('T')[0]
+                        Total: total
                     });
                     document.getElementById('attendanceForm').reset();
                     closeModal('attendanceModal');
@@ -515,78 +600,164 @@
                     const offering = parseInt(document.getElementById('finOffering').value) || 0;
                     const tithe = parseInt(document.getElementById('finTithe').value) || 0;
                     StorageService.push('finance', {
+                        id: Date.now().toString(),
                         eventId: document.getElementById('finEventId').value,
                         offering: offering,
-                        tithe: tithe,
-                        total: offering + tithe,
-                        date: new Date().toISOString().split('T')[0]
+                        tithe: tithe
                     });
                     document.getElementById('financeForm').reset();
                     closeModal('financeModal');
                 };
             },
+            
             renderAll() {
-                this.renderTable('eventTable', StorageService.db.events, e => {
-                    const timeDisplay = e.time ? e.time : '';
-                    // Format date to YYYY-MM-DD if it comes in ISO format
-                    const dateDisplay = e.date ? e.date.split('T')[0] : '';
-                    return `<td>${dateDisplay}</td><td>${timeDisplay}</td><td>${e.name || ''}</td><td>${e.category || ''}</td><td>${e.speaker || ''}</td>`;
-                });
-                
-                this.renderTable('memberTable', StorageService.db.members, m => 
-                    `<td>${m.name || ''}</td><td>${m.gender || ''}</td><td>${m.phone || ''}</td><td>${m.dept || ''}</td>`
-                );
-                
-                this.renderTable('attendanceTable', StorageService.db.attendance, a => {
-                    const event = StorageService.db.events.find(e => e.id === a.eventId) || { name: 'Unknown' };
-                    return `<td>${event.name}</td><td>${a.members || 0}</td><td>${a.visitors || 0}</td><td>${a.total || 0}</td>`;
-                });
-                
-                this.renderTable('financeTable', StorageService.db.finance, f => {
-                    const event = StorageService.db.events.find(e => e.id === f.eventId) || { name: 'Unknown' };
-                    return `<td>${event.name}</td><td>$${f.offering || 0}</td><td>$${f.tithe || 0}</td><td>$${f.total || 0}</td>`;
-                });
-                
+                this.renderEventTable();
+                this.renderMemberTable();
+                this.renderAttendanceTable();
+                this.renderFinanceTable();
                 this.updateStats();
                 this.populateEventSelects();
                 this.renderTrends();
+                this.renderReport();
             },
-            renderTable(id, data, rowFn) {
-                const tbody = document.querySelector(`#${id} tbody`);
+            
+            renderEventTable() {
+                const tbody = document.querySelector('#eventTable tbody');
                 if (!tbody) return;
-                tbody.innerHTML = data.map(item => `<tr>${rowFn(item)}</tr>`).join('');
+                tbody.innerHTML = StorageService.db.events.map(e => {
+                    const dateDisplay = e.date ? e.date.split('T')[0] : '';
+                    
+                    // Format time properly - handle different time formats
+                    let timeDisplay = e.time || '';
+                    if (timeDisplay && timeDisplay.includes('T')) {
+                        // If it's in ISO format like 1899-12-30T20:16:08.000Z
+                        try {
+                            const timeObj = new Date(timeDisplay);
+                            if (!isNaN(timeObj.getTime())) {
+                                // Format as HH:MM AM/PM
+                                timeDisplay = timeObj.toLocaleTimeString([], { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit',
+                                    hour12: true 
+                                });
+                            }
+                        } catch (e) {
+                            // If time is already in HH:MM format, keep it as is
+                            timeDisplay = e.time;
+                        }
+                    }
+                    
+                    return `<tr>
+                        <td>${dateDisplay}</td>
+                        <td>${timeDisplay}</td>
+                        <td>${e.name || ''}</td>
+                        <td>${e.category || ''}</td>
+                        <td>${e.speaker || ''}</td>
+                    </tr>`;
+                }).join('');
             },
+            
+            renderMemberTable() {
+                const tbody = document.querySelector('#memberTable tbody');
+                if (!tbody) return;
+                tbody.innerHTML = StorageService.db.members.map(m => 
+                    `<tr>
+                        <td>${m.name || ''}</td>
+                        <td>${m.gender || ''}</td>
+                        <td>${m.phone || ''}</td>
+                        <td>${m.dept || ''}</td>
+                    </tr>`
+                ).join('');
+            },
+            
+            renderAttendanceTable() {
+                const tbody = document.querySelector('#attendanceTable tbody');
+                if (!tbody) return;
+                tbody.innerHTML = StorageService.db.attendance.map(a => {
+                    const event = StorageService.db.events.find(e => e.id === a.eventId) || { name: 'Unknown' };
+                    const members = Number(a.members) || 0;
+                    const visitors = Number(a.visitors) || 0;
+                    const total = members + visitors;
+                    return `<tr>
+                        <td>${event.name}</td>
+                        <td>${members}</td>
+                        <td>${visitors}</td>
+                        <td>${total}</td>
+                    </tr>`;
+                }).join('');
+            },
+            
+            renderFinanceTable() {
+                const tbody = document.querySelector('#financeTable tbody');
+                if (!tbody) return;
+                tbody.innerHTML = StorageService.db.finance.map(f => {
+                    const event = StorageService.db.events.find(e => e.id === f.eventId) || { name: 'Unknown' };
+                    const offering = Number(f.offering) || 0;
+                    const tithe = Number(f.tithe) || 0;
+                    const total = offering + tithe;
+                    return `<tr>
+                        <td>${event.name}</td>
+                        <td>$${offering}</td>
+                        <td>$${tithe}</td>
+                        <td>$${total}</td>
+                    </tr>`;
+                }).join('');
+            },
+            
             updateStats() {
                 document.getElementById('dash-total-events').innerText = StorageService.db.events.length;
-                const totalAtt = StorageService.db.attendance.reduce((s, a) => s + (Number(a.members) || 0) + (Number(a.visitors) || 0), 0);
+                
+                const totalAtt = StorageService.db.attendance.reduce((s, a) => {
+                    return s + (Number(a.members) || 0) + (Number(a.visitors) || 0);
+                }, 0);
                 document.getElementById('dash-total-att').innerText = totalAtt;
-                const totalIncome = StorageService.db.finance.reduce((s, f) => s + (Number(f.offering) || 0) + (Number(f.tithe) || 0), 0);
+                
+                const totalIncome = StorageService.db.finance.reduce((s, f) => {
+                    return s + (Number(f.offering) || 0) + (Number(f.tithe) || 0);
+                }, 0);
                 document.getElementById('dash-total-income').innerText = `$${totalIncome}`;
             },
+            
             populateEventSelects() {
                 const events = StorageService.db.events;
                 const attSelect = document.getElementById('attEventId');
                 const finSelect = document.getElementById('finEventId');
                 
+                const options = events.map(e => {
+                    const dateDisplay = e.date ? e.date.split('T')[0] : '';
+                    return `<option value="${e.id}">${e.name} (${dateDisplay})</option>`;
+                }).join('');
+                
                 if (attSelect) {
-                    attSelect.innerHTML = events.map(e => `<option value="${e.id}">${e.name} (${e.date ? e.date.split('T')[0] : ''})</option>`).join('');
+                    attSelect.innerHTML = options || '<option value="">No events available</option>';
                 }
                 if (finSelect) {
-                    finSelect.innerHTML = events.map(e => `<option value="${e.id}">${e.name} (${e.date ? e.date.split('T')[0] : ''})</option>`).join('');
+                    finSelect.innerHTML = options || '<option value="">No events available</option>';
                 }
             },
+            
             renderTrends() {
                 const events = StorageService.db.events;
                 const attendance = StorageService.db.attendance;
                 
                 // Calculate average attendance
-                const totalAttendance = attendance.reduce((sum, a) => sum + (a.total || 0), 0);
+                const totalAttendance = attendance.reduce((sum, a) => {
+                    return sum + (Number(a.members) || 0) + (Number(a.visitors) || 0);
+                }, 0);
                 const avgAttendance = attendance.length ? Math.round(totalAttendance / attendance.length) : 0;
                 document.getElementById('trend-avg-attendance').innerText = avgAttendance;
                 document.getElementById('trend-total-events').innerText = events.length;
                 
                 // Calculate growth (compare last 3 events with previous 3)
-                const sortedAttendance = [...attendance].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                const attendanceWithTotal = attendance.map(a => ({
+                    ...a,
+                    total: (Number(a.members) || 0) + (Number(a.visitors) || 0)
+                }));
+                
+                const sortedAttendance = [...attendanceWithTotal].sort((a, b) => 
+                    (b.date || '').localeCompare(a.date || '')
+                );
+                
                 const recent3 = sortedAttendance.slice(0, 3).reduce((sum, a) => sum + (a.total || 0), 0);
                 const previous3 = sortedAttendance.slice(3, 6).reduce((sum, a) => sum + (a.total || 0), 0);
                 const growth = previous3 ? Math.round(((recent3 - previous3) / previous3) * 100) : 0;
@@ -595,6 +766,7 @@
                 // Render chart
                 this.renderAttendanceChart();
             },
+            
             renderAttendanceChart() {
                 const chartContainer = document.getElementById('attendanceChart');
                 if (!chartContainer) return;
@@ -612,9 +784,11 @@
                 events.forEach(event => {
                     const eventAttendance = attendance
                         .filter(a => a.eventId === event.id)
-                        .reduce((sum, a) => sum + (a.total || 0), 0);
+                        .reduce((sum, a) => {
+                            return sum + (Number(a.members) || 0) + (Number(a.visitors) || 0);
+                        }, 0);
                     
-                    const barHeight = eventAttendance ? Math.min(150, eventAttendance / 2) : 10; // Scale height
+                    const barHeight = eventAttendance ? Math.min(150, eventAttendance) : 5;
                     
                     const barWrapper = document.createElement('div');
                     barWrapper.className = 'bar-wrapper';
@@ -637,6 +811,57 @@
                     
                     chartContainer.appendChild(barWrapper);
                 });
+            },
+            
+            renderReport() {
+                const events = StorageService.db.events;
+                const members = StorageService.db.members;
+                const attendance = StorageService.db.attendance;
+                const finance = StorageService.db.finance;
+                
+                // Update summary stats
+                document.getElementById('report-total-events').innerText = events.length;
+                document.getElementById('report-total-members').innerText = members.length;
+                
+                const totalAttendance = attendance.reduce((sum, a) => {
+                    return sum + (Number(a.members) || 0) + (Number(a.visitors) || 0);
+                }, 0);
+                document.getElementById('report-total-attendance').innerText = totalAttendance;
+                
+                const totalIncome = finance.reduce((sum, f) => {
+                    return sum + (Number(f.offering) || 0) + (Number(f.tithe) || 0);
+                }, 0);
+                document.getElementById('report-total-income').innerText = totalIncome;
+                
+                const avgAttendance = events.length ? Math.round(totalAttendance / events.length) : 0;
+                document.getElementById('report-avg-attendance').innerText = avgAttendance;
+                
+                // Render events table
+                const reportBody = document.getElementById('report-events-body');
+                if (reportBody) {
+                    reportBody.innerHTML = events.slice(-5).reverse().map(event => {
+                        const eventAttendance = attendance
+                            .filter(a => a.eventId === event.id)
+                            .reduce((sum, a) => {
+                                return sum + (Number(a.members) || 0) + (Number(a.visitors) || 0);
+                            }, 0);
+                            
+                        const eventIncome = finance
+                            .filter(f => f.eventId === event.id)
+                            .reduce((sum, f) => {
+                                return sum + (Number(f.offering) || 0) + (Number(f.tithe) || 0);
+                            }, 0);
+                        
+                        return `
+                            <tr>
+                                <td>${event.date || ''}</td>
+                                <td>${event.name || ''}</td>
+                                <td>${eventAttendance}</td>
+                                <td>$${eventIncome}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
             }
         };
 
@@ -663,6 +888,7 @@
             }
         };
 
+        // Initialize the app
         UI.init();
     </script>
 </body>

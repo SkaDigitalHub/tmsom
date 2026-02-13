@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPRN - Event Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0f4c75;
+            --secondary: #3282b8;
+            --accent: #bbe1fa;
+            --dark: #1b262c;
+            --light: #f4f7f6;
+            --white: #ffffff;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --sidebar-width: 260px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--light); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+
+        .wrapper { display: flex; min-height: 100vh; }
+        
+        aside {
+            width: var(--sidebar-width);
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .sidebar-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+        .sidebar-header p { font-size: 0.7rem; opacity: 0.8; margin-top: 5px; }
+        
+        .close-sidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        nav { flex: 1; padding: 20px 0; }
+        nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        nav a i { margin-right: 15px; width: 20px; }
+        nav a:hover, nav a.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+            border-left-color: var(--accent);
+        }
+
+        .role-selector { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .role-selector select { width: 100%; padding: 8px; border-radius: 5px; background: var(--secondary); color: white; border: none; outline: none; }
+
+        main { flex: 1; margin-left: var(--sidebar-width); padding: 30px; transition: var(--transition); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; }
+        .stat-icon { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 15px; }
+        .stat-info h3 { font-size: 0.8rem; color: #777; text-transform: uppercase; }
+        .stat-info p { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+        .card { background: var(--white); padding: 25px; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 25px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        .btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+        .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .form-row .form-group { flex: 1; min-width: 200px; }
+
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #f8f9fa; text-align: left; padding: 12px; font-size: 0.9rem; color: #555; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+        #toast { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: #333; color: white; border-radius: 8px; display: none; z-index: 2000; box-shadow: var(--shadow); }
+
+        .trend-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .trend-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .trend-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        
+        .trend-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .trend-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 992px) {
+            aside { transform: translateX(-100%); }
+            aside.open { transform: translateX(0); }
+            main { margin-left: 0; }
+            .mobile-toggle { display: block; }
+            .close-sidebar { display: block; }
+            .overlay { display: block; }
+            .overlay.hidden { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .form-row { flex-direction: column; }
+            .form-row .form-group { min-width: 100%; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 20px; }
+            .card-header { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .chart-container { display: flex; align-items: flex-end; gap: 15px; height: 200px; padding-top: 20px; overflow-x: auto; padding-bottom: 30px; }
+        .bar-wrapper { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+        .bar { background: var(--secondary); width: 40px; border-radius: 5px 5px 0 0; transition: height 0.3s ease; }
+        .bar-label { font-size: 0.7rem; margin-top: 5px; white-space: nowrap; transform: rotate(-45deg); transform-origin: top left; }
+        .bar-value { font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h2>CPRN</h2>
+                <p>Event Management System</p>
+                <button class="close-sidebar" id="closeSidebarBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <nav id="main-nav">
+                <a href="#dashboard" class="active" data-section="dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="#events" data-section="events"><i class="fas fa-calendar-alt"></i> Events</a>
+                <a href="#attendance" data-section="attendance"><i class="fas fa-user-check"></i> Attendance</a>
+                <a href="#finance" data-section="finance"><i class="fas fa-hand-holding-usd"></i> Finance</a>
+                <a href="#members" data-section="members"><i class="fas fa-users"></i> Members</a>
+                <a href="#reports" data-section="reports"><i class="fas fa-chart-line"></i> Reports</a>
+            </nav>
+            <div class="role-selector">
+                <select id="roleSelect">
+                    <option value="admin">Admin</option>
+                    <option value="finance">Finance Officer</option>
+                    <option value="attendance">Attendance Officer</option>
+                </select>
+            </div>
+        </aside>
+        
+        <div class="overlay hidden" id="overlay"></div>
+
+        <main>
+            <header>
+                <div class="mobile-toggle" id="menuBtn"><i class="fas fa-bars"></i></div>
+                <h2 id="section-title">Dashboard</h2>
+                <div class="user-meta" id="currentRoleDisplay">Role: Admin</div>
+            </header>
+
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(15, 76, 117, 0.1); color: var(--primary);"><i class="fas fa-calendar-day"></i></div>
+                        <div class="stat-info"><h3>Events</h3><p id="dash-total-events">0</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(40, 167, 69, 0.1); color: var(--success);"><i class="fas fa-users"></i></div>
+                        <div class="stat-info"><h3>Total Attendance</h3><p id="dash-total-att">0</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 193, 7, 0.1); color: var(--warning);"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="stat-info"><h3>Total Income</h3><p id="dash-total-income">$0</p></div>
+                    </div>
+                </div>
+                
+                <div class="trend-card">
+                    <h3>Event & Attendance Trends</h3>
+                    <div class="trend-stats">
+                        <div class="trend-item">
+                            <div class="trend-value" id="trend-avg-attendance">0</div>
+                            <div class="trend-label">Avg Attendance</div>
+                        </div>
+                        <div class="trend-item">
+                            <div class="trend-value" id="trend-total-events">0</div>
+                            <div class="trend-label">Total Events</div>
+                        </div>
+                        <div class="trend-item">
+                            <div class="trend-value" id="trend-growth">0%</div>
+                            <div class="trend-label">Growth</div>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="attendanceChart"></div>
+                </div>
+            </section>
+
+            <section id="events" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Event List</h3>
+                        <button class="btn btn-primary role-admin" onclick="openModal('eventModal')"><i class="fas fa-plus"></i> New Event</button>
+                    </div>
+                    <div class="table-responsive"><table id="eventTable"><thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Category</th><th>Speaker</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="attendance" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Attendance Records</h3>
+                        <button class="btn btn-primary role-attendance role-admin" onclick="openModal('attendanceModal')"><i class="fas fa-plus"></i> Record</button>
+                    </div>
+                    <div class="table-responsive"><table id="attendanceTable"><thead><tr><th>Event</th><th>Members</th><th>Visitors</th><th>Total</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="finance" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Financial Records</h3>
+                        <button class="btn btn-primary role-finance role-admin" onclick="openModal('financeModal')"><i class="fas fa-plus"></i> Add Income</button>
+                    </div>
+                    <div class="table-responsive"><table id="financeTable"><thead><tr><th>Event</th><th>Offering</th><th>Tithe</th><th>Total</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="members" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Member Directory</h3>
+                        <button class="btn btn-primary role-admin" onclick="openModal('memberModal')"><i class="fas fa-user-plus"></i> Add Member</button>
+                    </div>
+                    <div class="table-responsive"><table id="memberTable"><thead><tr><th>Name</th><th>Gender</th><th>Phone</th><th>Department</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </section>
+
+            <section id="reports" class="content-section">
+                <div class="card"><h3>Reports</h3><div id="reportContainer"></div><button class="btn btn-primary" onclick="window.print()">Print</button></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="eventModal" class="modal"><div class="modal-content">
+        <h3>New Event</h3>
+        <form id="eventForm">
+            <div class="form-group"><label>Event Name</label><input type="text" id="eventName" class="form-control" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Date</label><input type="date" id="eventDate" class="form-control" required></div>
+                <div class="form-group"><label>Time</label><input type="time" id="eventTime" class="form-control"></div>
+            </div>
+            <div class="form-group"><label>Category</label><select id="eventCategory" class="form-control"><option>Service</option><option>Prayer</option><option>Conference</option><option>Workshop</option></select></div>
+            <div class="form-group"><label>Speaker</label><input type="text" id="eventSpeaker" class="form-control"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div></div>
+
+    <div id="attendanceModal" class="modal"><div class="modal-content">
+        <h3>Record Attendance</h3>
+        <form id="attendanceForm">
+            <div class="form-group"><label>Event</label><select id="attEventId" class="form-control" required></select></div>
+            <div class="form-group"><label>Members</label><input type="number" id="attMembers" class="form-control" value="0" min="0" step="1"></div>
+            <div class="form-group"><label>Visitors</label><input type="number" id="attVisitors" class="form-control" value="0" min="0" step="1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('attendanceModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div></div>
+
+    <div id="financeModal" class="modal"><div class="modal-content">
+        <h3>Record Finance</h3>
+        <form id="financeForm">
+            <div class="form-group"><label>Event</label><select id="finEventId" class="form-control" required></select></div>
+            <div class="form-group"><label>Offering</label><input type="number" id="finOffering" class="form-control" value="0" min="0" step="1"></div>
+            <div class="form-group"><label>Tithe</label><input type="number" id="finTithe" class="form-control" value="0" min="0" step="1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('financeModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div></div>
+
+    <div id="memberModal" class="modal"><div class="modal-content">
+        <h3>Member Information</h3>
+        <form id="memberForm">
+            <div class="form-group"><label>Full Name</label><input type="text" id="memName" class="form-control" required></div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="memGender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="memPhone" class="form-control"></div>
+            <div class="form-group"><label>Department</label><input type="text" id="memDept" class="form-control"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('memberModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Member</button>
+            </div>
+        </form>
+    </div></div>
+
+    <div id="toast">Action completed!</div>
+
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzXuG_1vQ7Cswj8dE8H1LkgQrtrMNJ6IxE5VQ35ltI5TZoXf0KjDFTIdUzOssVoa938/exec"; 
+
+        const StorageService = {
+            db: { events: [], attendance: [], finance: [], members: [] },
+            async sync(collection) {
+                if(!GAS_URL.includes("macros")) return;
+                try {
+                    const r = await fetch(`${GAS_URL}?collection=${collection}`);
+                    this.db[collection] = await r.json();
+                } catch (e) {
+                    console.log("Offline mode - using local data");
+                }
+                UI.renderAll();
+            },
+            async push(collection, data) {
+                data.id = Date.now().toString();
+                this.db[collection].push(data);
+                if(GAS_URL.includes("macros")) {
+                    try {
+                        await fetch(GAS_URL, {
+                            method: "POST",
+                            mode: "no-cors",
+                            body: JSON.stringify({ collection, data })
+                        });
+                    } catch (e) {
+                        console.log("Offline - saved locally");
+                    }
+                }
+                UI.renderAll();
+                this.showToast(`${collection} saved successfully`);
+            },
+            showToast(msg) {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 3000);
+            }
+        };
+
+        const UI = {
+            init() {
+                this.setupNavigation();
+                this.setupEventListeners();
+                ['events', 'attendance', 'finance', 'members'].forEach(c => StorageService.sync(c));
+            },
+            setupNavigation() {
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.onclick = (e) => {
+                        e.preventDefault();
+                        const id = link.getAttribute('data-section');
+                        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                        document.getElementById(id).classList.add('active');
+                        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                        link.classList.add('active');
+                        document.getElementById('section-title').textContent = link.textContent.trim();
+                        
+                        // Close sidebar on mobile after navigation
+                        if (window.innerWidth <= 992) {
+                            document.getElementById('sidebar').classList.remove('open');
+                            document.getElementById('overlay').classList.add('hidden');
+                        }
+                    }
+                });
+                
+                const menuBtn = document.getElementById('menuBtn');
+                const closeBtn = document.getElementById('closeSidebarBtn');
+                const overlay = document.getElementById('overlay');
+                const sidebar = document.getElementById('sidebar');
+                
+                menuBtn.onclick = () => {
+                    sidebar.classList.toggle('open');
+                    overlay.classList.toggle('hidden');
+                };
+                
+                closeBtn.onclick = () => {
+                    sidebar.classList.remove('open');
+                    overlay.classList.add('hidden');
+                };
+                
+                overlay.onclick = () => {
+                    sidebar.classList.remove('open');
+                    overlay.classList.add('hidden');
+                };
+                
+                document.getElementById('roleSelect').onchange = function() {
+                    document.getElementById('currentRoleDisplay').textContent = `Role: ${this.options[this.selectedIndex].text}`;
+                };
+            },
+            setupEventListeners() {
+                document.getElementById('eventForm').onsubmit = (e) => {
+                    e.preventDefault();
+                    const time = document.getElementById('eventTime').value;
+                    const date = document.getElementById('eventDate').value;
+                    StorageService.push('events', {
+                        name: document.getElementById('eventName').value,
+                        date: date, // This will be YYYY-MM-DD format
+                        time: time,
+                        datetime: time ? `${date} ${time}` : date,
+                        category: document.getElementById('eventCategory').value,
+                        speaker: document.getElementById('eventSpeaker').value || 'TBD'
+                    });
+                    document.getElementById('eventForm').reset();
+                    closeModal('eventModal');
+                };
+                
+                document.getElementById('memberForm').onsubmit = (e) => {
+                    e.preventDefault();
+                    StorageService.push('members', {
+                        name: document.getElementById('memName').value,
+                        gender: document.getElementById('memGender').value,
+                        phone: document.getElementById('memPhone').value || 'N/A',
+                        dept: document.getElementById('memDept').value || 'General',
+                        status: 'Member'
+                    });
+                    document.getElementById('memberForm').reset();
+                    closeModal('memberModal');
+                };
+
+                document.getElementById('attendanceForm').onsubmit = (e) => {
+                    e.preventDefault();
+                    const members = parseInt(document.getElementById('attMembers').value) || 0;
+                    const visitors = parseInt(document.getElementById('attVisitors').value) || 0;
+                    StorageService.push('attendance', {
+                        eventId: document.getElementById('attEventId').value,
+                        members: members,
+                        visitors: visitors,
+                        total: members + visitors,
+                        date: new Date().toISOString().split('T')[0]
+                    });
+                    document.getElementById('attendanceForm').reset();
+                    closeModal('attendanceModal');
+                };
+
+                document.getElementById('financeForm').onsubmit = (e) => {
+                    e.preventDefault();
+                    const offering = parseInt(document.getElementById('finOffering').value) || 0;
+                    const tithe = parseInt(document.getElementById('finTithe').value) || 0;
+                    StorageService.push('finance', {
+                        eventId: document.getElementById('finEventId').value,
+                        offering: offering,
+                        tithe: tithe,
+                        total: offering + tithe,
+                        date: new Date().toISOString().split('T')[0]
+                    });
+                    document.getElementById('financeForm').reset();
+                    closeModal('financeModal');
+                };
+            },
+            renderAll() {
+                this.renderTable('eventTable', StorageService.db.events, e => {
+                    const timeDisplay = e.time ? e.time : '';
+                    // Format date to YYYY-MM-DD if it comes in ISO format
+                    const dateDisplay = e.date ? e.date.split('T')[0] : '';
+                    return `<td>${dateDisplay}</td><td>${timeDisplay}</td><td>${e.name || ''}</td><td>${e.category || ''}</td><td>${e.speaker || ''}</td>`;
+                });
+                
+                this.renderTable('memberTable', StorageService.db.members, m => 
+                    `<td>${m.name || ''}</td><td>${m.gender || ''}</td><td>${m.phone || ''}</td><td>${m.dept || ''}</td>`
+                );
+                
+                this.renderTable('attendanceTable', StorageService.db.attendance, a => {
+                    const event = StorageService.db.events.find(e => e.id === a.eventId) || { name: 'Unknown' };
+                    return `<td>${event.name}</td><td>${a.members || 0}</td><td>${a.visitors || 0}</td><td>${a.total || 0}</td>`;
+                });
+                
+                this.renderTable('financeTable', StorageService.db.finance, f => {
+                    const event = StorageService.db.events.find(e => e.id === f.eventId) || { name: 'Unknown' };
+                    return `<td>${event.name}</td><td>$${f.offering || 0}</td><td>$${f.tithe || 0}</td><td>$${f.total || 0}</td>`;
+                });
+                
+                this.updateStats();
+                this.populateEventSelects();
+                this.renderTrends();
+            },
+            renderTable(id, data, rowFn) {
+                const tbody = document.querySelector(`#${id} tbody`);
+                if (!tbody) return;
+                tbody.innerHTML = data.map(item => `<tr>${rowFn(item)}</tr>`).join('');
+            },
+            updateStats() {
+                document.getElementById('dash-total-events').innerText = StorageService.db.events.length;
+                const totalAtt = StorageService.db.attendance.reduce((s, a) => s + (Number(a.members) || 0) + (Number(a.visitors) || 0), 0);
+                document.getElementById('dash-total-att').innerText = totalAtt;
+                const totalIncome = StorageService.db.finance.reduce((s, f) => s + (Number(f.offering) || 0) + (Number(f.tithe) || 0), 0);
+                document.getElementById('dash-total-income').innerText = `$${totalIncome}`;
+            },
+            populateEventSelects() {
+                const events = StorageService.db.events;
+                const attSelect = document.getElementById('attEventId');
+                const finSelect = document.getElementById('finEventId');
+                
+                if (attSelect) {
+                    attSelect.innerHTML = events.map(e => `<option value="${e.id}">${e.name} (${e.date ? e.date.split('T')[0] : ''})</option>`).join('');
+                }
+                if (finSelect) {
+                    finSelect.innerHTML = events.map(e => `<option value="${e.id}">${e.name} (${e.date ? e.date.split('T')[0] : ''})</option>`).join('');
+                }
+            },
+            renderTrends() {
+                const events = StorageService.db.events;
+                const attendance = StorageService.db.attendance;
+                
+                // Calculate average attendance
+                const totalAttendance = attendance.reduce((sum, a) => sum + (a.total || 0), 0);
+                const avgAttendance = attendance.length ? Math.round(totalAttendance / attendance.length) : 0;
+                document.getElementById('trend-avg-attendance').innerText = avgAttendance;
+                document.getElementById('trend-total-events').innerText = events.length;
+                
+                // Calculate growth (compare last 3 events with previous 3)
+                const sortedAttendance = [...attendance].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                const recent3 = sortedAttendance.slice(0, 3).reduce((sum, a) => sum + (a.total || 0), 0);
+                const previous3 = sortedAttendance.slice(3, 6).reduce((sum, a) => sum + (a.total || 0), 0);
+                const growth = previous3 ? Math.round(((recent3 - previous3) / previous3) * 100) : 0;
+                document.getElementById('trend-growth').innerText = growth + '%';
+                
+                // Render chart
+                this.renderAttendanceChart();
+            },
+            renderAttendanceChart() {
+                const chartContainer = document.getElementById('attendanceChart');
+                if (!chartContainer) return;
+                
+                const events = StorageService.db.events.slice(-5); // Last 5 events
+                const attendance = StorageService.db.attendance;
+                
+                chartContainer.innerHTML = '';
+                
+                if (events.length === 0) {
+                    chartContainer.innerHTML = '<p style="text-align: center; width: 100%;">No data to display</p>';
+                    return;
+                }
+                
+                events.forEach(event => {
+                    const eventAttendance = attendance
+                        .filter(a => a.eventId === event.id)
+                        .reduce((sum, a) => sum + (a.total || 0), 0);
+                    
+                    const barHeight = eventAttendance ? Math.min(150, eventAttendance / 2) : 10; // Scale height
+                    
+                    const barWrapper = document.createElement('div');
+                    barWrapper.className = 'bar-wrapper';
+                    
+                    const barValue = document.createElement('div');
+                    barValue.className = 'bar-value';
+                    barValue.textContent = eventAttendance;
+                    
+                    const bar = document.createElement('div');
+                    bar.className = 'bar';
+                    bar.style.height = barHeight + 'px';
+                    
+                    const barLabel = document.createElement('div');
+                    barLabel.className = 'bar-label';
+                    barLabel.textContent = event.name.substring(0, 8) + (event.name.length > 8 ? '...' : '');
+                    
+                    barWrapper.appendChild(barValue);
+                    barWrapper.appendChild(bar);
+                    barWrapper.appendChild(barLabel);
+                    
+                    chartContainer.appendChild(barWrapper);
+                });
+            }
+        };
+
+        function openModal(id) { 
+            document.getElementById(id).style.display = 'flex'; 
+        }
+        
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
+
+        // Handle window resize
+        window.onresize = function() {
+            if (window.innerWidth > 992) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('overlay').classList.add('hidden');
+            }
+        };
+
+        UI.init();
+    </script>
+</body>
+</html>
